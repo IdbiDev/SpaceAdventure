@@ -82,7 +82,7 @@ public class CircularMapManager {
         int attempts = 0;
         int created = 0;
 
-        List<GameMap> maps = new ArrayList<>(inGameMaps);
+        List<GameMap> maps = new ArrayList<>(inGameMaps);//
 
         while (created < maxConnections && attempts < maxConnections * 5) {
             GameMap a = maps.get(rand.nextInt(maps.size()));
