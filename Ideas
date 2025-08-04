@@ -1,0 +1,26 @@
+Map system
+Predefined randomly connected struct
+
+Zseblámpa rendszer FOG OF WAR
+vents check?
+
+Player:
+    Escape the ship
+    Avoid the alien
+    Complete the objectives
+    Find out what happend
+
+Alien:
+    Can travel in vents
+    Can attack the player
+    Can move on its own
+    Kill the player
+
+
+Multiplayer:
+    CO-op objectives
+    Escape
+
+    Alien Vs Player
+
+
