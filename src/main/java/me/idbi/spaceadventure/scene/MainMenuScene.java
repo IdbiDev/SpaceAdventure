@@ -14,7 +14,6 @@ import me.idbi.spaceadventure.terminal.TerminalManager;
 
 public class MainMenuScene implements Scene {
 
-
     @Override
     public void draw() {
 //        Main.getTerminalManager().toUnderline();

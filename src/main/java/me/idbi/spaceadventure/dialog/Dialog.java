@@ -16,6 +16,7 @@ public class Dialog {
         this.buffer = "";
         this.dialogBuilder = dialogBuilder;
     }
+
     public void print() {
         Main.getPlayer().setDialog(this);
         this.buffer = "";
