@@ -13,12 +13,15 @@ public class Door extends MapMondeo {
 
     private GameMap leadTo;
 
-    private GameMap from;
 
     private boolean locked;
 
     public Door(Location location, TerminalManager.Color textColor, TerminalManager.Color backgroundColor) {
         super(location, textColor, backgroundColor);
+    }
+
+    public boolean isFree() {
+        return leadTo == null;
     }
 
 

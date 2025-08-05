@@ -3,8 +3,10 @@ package me.idbi.spaceadventure.map;
 public enum MapType {
     LOBBY,
     REACTOR,
-    CRYO_UNIT,
+    //CRYO_UNIT,
     CONTROL_CENTER,
     MEDBAY,
+    COMMUNICATION,
+    HALLWAY
 
 }
