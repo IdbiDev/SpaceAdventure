@@ -1,11 +1,14 @@
 package me.idbi.spaceadventure.terminal;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import me.idbi.spaceadventure.Main;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
+import java.awt.*;
 import java.io.IOException;
 
 @Getter
@@ -21,6 +24,9 @@ public class TerminalManager {
 
     @Setter
     private boolean spacePressed;
+
+    private FrameBuffer displayBuffer;
+    private FrameBuffer backendBuffer;
 
     public interface TerminalFormatter {
     }
@@ -44,7 +50,26 @@ public class TerminalManager {
         BLUE_BACKGROUND("\u001B[44m"),
         MAGENTA_BACKGROUND("\u001B[45m"),
         CYAN_BACKGROUND("\u001B[46m"),
-        WHITE_BACKGROUND("\u001B[47m");
+        WHITE_BACKGROUND("\u001B[47m"),
+        // Bright (élénk) színek
+        BRIGHT_BLACK("\u001B[90m"),
+        BRIGHT_RED("\u001B[91m"),
+        BRIGHT_GREEN("\u001B[92m"),
+        BRIGHT_YELLOW("\u001B[93m"),
+        BRIGHT_BLUE("\u001B[94m"),
+        BRIGHT_MAGENTA("\u001B[95m"),
+        BRIGHT_CYAN("\u001B[96m"),
+        BRIGHT_WHITE("\u001B[97m"),
+
+        // Bright háttérszínek
+        BRIGHT_BLACK_BACKGROUND("\u001B[100m"),
+        BRIGHT_RED_BACKGROUND("\u001B[101m"),
+        BRIGHT_GREEN_BACKGROUND("\u001B[102m"),
+        BRIGHT_YELLOW_BACKGROUND("\u001B[103m"),
+        BRIGHT_BLUE_BACKGROUND("\u001B[104m"),
+        BRIGHT_MAGENTA_BACKGROUND("\u001B[105m"),
+        BRIGHT_CYAN_BACKGROUND("\u001B[106m"),
+        BRIGHT_WHITE_BACKGROUND("\u001B[107m");
 
         private final String code;
 
@@ -138,7 +163,10 @@ public class TerminalManager {
     }
 
     public void moveCursor(int row, int column) {
-        System.out.print(Cursor.TO_POSITION.format(row, column));
+        backendBuffer.setCursorPosRows(row);
+        backendBuffer.setCursorPosCols(column);
+        //Main.getTerminalManager().getBackendBuffer().setCursorPosRows(tempY);
+        //System.out.print(Cursor.TO_POSITION.format(row, column));
     }
 
     public void moveCursorUp(int n) {
@@ -154,7 +182,8 @@ public class TerminalManager {
     }
 
     public void moveCursorRight(int n) {
-        System.out.print(Cursor.FORWARD.format(n));
+        backendBuffer.setCursorPosCols(backendBuffer.getCursorPosCols() + n);
+        //System.out.print(Cursor.FORWARD.format(n));
     }
 
     public void saveCursor() {
@@ -182,24 +211,26 @@ public class TerminalManager {
         }
     }
 
-    public void toBold() {
-        System.out.print(Style.BOLD);
-    }
-
-    public void toUnderline() {
-        System.out.print(Style.UNDERLINE);
-    }
-
-    public void toItalic() {
-        System.out.print(Style.ITALIC);
-    }
+//    public void toBold() {
+//        System.out.print(Style.BOLD);
+//    }
+//
+//    public void toUnderline() {
+//        System.out.print(Style.UNDERLINE);
+//    }
+//
+//    public void toItalic() {
+//        System.out.print(Style.ITALIC);
+//    }
 
     public void resetStyle() {
         System.out.print(Style.RESET);
     }
 
     public void home() {
-        System.out.print(Cursor.HOME);
+        backendBuffer.setCursorPosCols(0);
+        backendBuffer.setCursorPosRows(0);
+        //System.out.print(Cursor.HOME);
     }
 
     public int getWidth() {
@@ -252,6 +283,27 @@ public class TerminalManager {
         resetStyle();
     }
 
+
+    public void flip() {
+        for (int y = 0; y <= displayBuffer.getHeight(); y++) {
+            for(int x = 0; x<=displayBuffer.getWidth();x++){
+                char displayedChar = displayBuffer.get(y,x);
+                char backEndChar = backendBuffer.get(y,x);
+                if(displayedChar == backEndChar)
+                    continue;
+                displayBuffer.set(y,x,backEndChar);
+            }
+        }
+    }
+
+
+    public void println(String string) {
+        backendBuffer.println(string);
+    }
+    public void print(String string) {
+        backendBuffer.print(string);
+    }
+
     public void clearLine() {
         System.out.print("\r" + Screen.CLEAR_LINE);
     }
@@ -270,6 +322,10 @@ public class TerminalManager {
         this.terminalResizeListener = new TerminalResizeListener(this);
         terminalResizeThread = new Thread(this.terminalResizeListener);
         terminalResizeThread.start();
+
+        displayBuffer = new FrameBuffer(getHeight(),getWidth());
+        backendBuffer = new FrameBuffer(getHeight(),getWidth());
+
 
     }
 
@@ -296,6 +352,13 @@ public class TerminalManager {
                     //Main.debug("Terminal size changed");
                     lastWidth = terminal.getWidth();
                     lastHeight = terminal.getHeight();
+                    Main.getTerminalManager().displayBuffer.resize(lastHeight, lastWidth);
+                    Main.getTerminalManager().backendBuffer.resize(lastHeight, lastWidth);
+                }
+                if(lastWidth < 200 || lastHeight < 45) {
+                    Main.getTerminalManager().clear();
+                    System.out.println(lastWidth + " " + lastHeight);
+                    System.out.println("Terminal Size error!!!");
                 }
             }
         }

@@ -1,6 +1,15 @@
 package me.idbi.spaceadventure.scene;
 
 import me.idbi.spaceadventure.Main;
+import me.idbi.spaceadventure.effects.GlitchEffect;
+import me.idbi.spaceadventure.table.Alignment;
+import me.idbi.spaceadventure.table.Table;
+import me.idbi.spaceadventure.table.TableRenderer;
+import me.idbi.spaceadventure.table.Utils;
+import me.idbi.spaceadventure.table.parts.Column;
+import me.idbi.spaceadventure.table.parts.Row;
+import me.idbi.spaceadventure.table.parts.cells.Cell;
+import me.idbi.spaceadventure.table.parts.cells.SelectableCell;
 import me.idbi.spaceadventure.terminal.TerminalManager;
 
 public class MainMenuScene implements Scene {
@@ -8,29 +17,49 @@ public class MainMenuScene implements Scene {
 
     @Override
     public void draw() {
-        Main.getTerminalManager().toUnderline();
-        Main.getTerminalManager().center("Space Adventure", TerminalManager.Color.CYAN);
-        Main.getTerminalManager().moveCursorDown(1);
+//        Main.getTerminalManager().toUnderline();
+//        Main.getTerminalManager().center("Space Adventure", TerminalManager.Color.CYAN);
+//        Main.getTerminalManager().moveCursorDown(1);
+//        Main.getTerminalManager().hideCursor();
+        for (int i = 0; i < 4; i++) {
+            GlitchEffect.playEffect();
+        }
+        Main.getTerminalManager().home();
         Main.getTerminalManager().hideCursor();
-//        Dialog d = new DialogBuilder()
-//                .showCursor().append("asdasd fasz kruvakruvakruvakruvakruvakruvakruvakruvakruvakruvakruva", 50).time(2000)
-//                .newLine()
-//                .hideCursor().append("buzi vagyok nem is", 1000).showCursor().time(500)
-//                .showCursor()
-//                .append(" A KURVA CICA asdpőasdasdasdasdasdpőasdasdasdasdasdpőasdasdasdasdasdpőasdasdasdasd",999).time(1000)
-//                .append(" A KURVA CICA asdpőasdasdasdasdasdpőasdasdasdasdasdpőasdasdasdasdasdpőasdasdasdasd",999).time(1000)
-//                .append(" A KURVA CICA asdpőasdasdasdasdasdpőasdasdasdasdasdpőasdasdasdasdasdpőasdasdasdasd1",999).time(1000)
-//                .append(" A KURVA CICA asdpőasdasdasdasdasdpőasdasdasdasdasdpőasdasdasdasdasdpőasdasdasdas2d",999).time(1000)
-//                .append(" A KURVA CICA asdpőasdasdasdasdasdpőasdasdasdasdasdpőasdasdasdasdasdpőasdasdasdasd3",999).time(1000)
-//                .hideCursor()
-//                .build();
-//        d.print();
-        //Hallod tesó, és hol seteljük be a playernek?
-//        new DialogBuilder()
-//                .append("Killyourself uwu", true, false, 50, 2000)
-//                .append(" Nem vagyok buzi", false, true, 50, 2000)
-//                .append("\n", false, false, 50, 500)
-//                .append("XDD XDD XDDD", false, true, 10, 1500)
-//                .print();
+        Table table = new Table();
+
+        Column titleColumn = new Column(15);
+        Column col = new Column(15);
+        table.addColumns(col, titleColumn);
+
+        Row title1 = new Row(new Cell("   _____                                    _                 _                  ").foreground(TerminalManager.Color.BLUE), new Cell("Menü", Alignment.CENTER).foreground(TerminalManager.Color.BLACK).background(TerminalManager.Color.WHITE_BACKGROUND));
+        Row title2 = new Row(new Cell("  / ____|                          /\\      | |               | |                ").foreground(TerminalManager.Color.BLUE), new Cell(""));
+        Row title3 = new Row(new Cell(" | (___  _ __   __ _  ___ ___     /  \\   __| |_   _____ _ __ | |_ _   _ _ __ ___ ").foreground(TerminalManager.Color.BLUE), new SelectableCell("Új játék").select());
+        Row title4 = new Row(new Cell("  \\___ \\| '_ \\ / _` |/ __/ _ \\   / /\\ \\ / _` \\ \\ / / _ \\ '_ \\| __| | | | '__/ _ \\").foreground(TerminalManager.Color.BLUE), new SelectableCell("Folytatás"));
+        Row title5 = new Row(new Cell("  ____) | |_) | (_| | (_|  __/  / ____ \\ (_| |\\ V /  __/ | | | |_| |_| | | |  __/").foreground(TerminalManager.Color.BLUE), new SelectableCell("Kilépés"));
+        Row title6 = new Row(new Cell(" |_____/| .__/ \\__,_|\\___\\___| /_/    \\_\\__,_| \\_/ \\___|_| |_|\\__|\\__,_|_|  \\___|").foreground(TerminalManager.Color.BLUE), new Cell(""));
+        Row title7 = new Row(new Cell("        | |                                                                      ").foreground(TerminalManager.Color.BLUE), new Cell(""));
+        Row title8 = new Row(new Cell("        |_|                                                                      ").foreground(TerminalManager.Color.BLUE), new Cell("Készítette: Bozsóki Adrián, Kovács Balázs").foreground(TerminalManager.Color.BRIGHT_BLACK));
+
+        table.addRows(new Row(), title1, title2, title3, title4, title5, title6, title7, title8, new Row());
+
+        TableRenderer renderer = new TableRenderer(table);
+        int tempY = renderer.getYOffset();
+        for (String s : renderer.render()) {
+            int xOffset = Main.getTerminalManager().getWidth() / 2;
+            int tempOffset = Utils.purifyRow(s).length() / 2;
+            if(tempOffset % 2 == 1)
+                tempOffset--;
+            xOffset -= tempOffset;
+            Main.getTerminalManager().moveCursor(tempY, xOffset);
+            // teso tul jo vagyok ofc nem printelek random
+            //System.out.print(s);
+
+            Main.getTerminalManager().print(s);
+            tempY++;
+        }
+
+
+
     }
 }

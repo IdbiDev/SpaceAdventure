@@ -2,6 +2,7 @@ package me.idbi.spaceadventure.scene;
 
 import lombok.Getter;
 import me.idbi.spaceadventure.Main;
+import me.idbi.spaceadventure.terminal.TerminalManager;
 
 public class SceneManager {
 
@@ -18,9 +19,14 @@ public class SceneManager {
 
     public void draw(boolean clear) {
         Main.getTerminalManager().home();
+        System.out.print(TerminalManager.Cursor.HOME);
+        System.out.print(TerminalManager.Screen.CLEAR);
+
         if(clear)
             Main.getTerminalManager().clear();
         currentScene.draw();
+        Main.getTerminalManager().flip();
+
 
     }
 }

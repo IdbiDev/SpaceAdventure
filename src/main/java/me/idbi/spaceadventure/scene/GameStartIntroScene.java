@@ -62,7 +62,7 @@ public class GameStartIntroScene implements Scene{
                 .newLine()
                 .append(">>> LAUNCHING OPERATING SHELL...", 13)
                 .time(500);
-        tm.playSound(TerminalManager.BeepSound.BEEP_SOUND);
+        //tm.playSound(TerminalManager.BeepSound.BEEP_SOUND);
         dialogBuilder.build().print();
 
     }

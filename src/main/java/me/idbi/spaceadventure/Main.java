@@ -9,13 +9,14 @@ import me.idbi.spaceadventure.terminal.InputManager;
 import me.idbi.spaceadventure.terminal.TerminalManager;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class Main {
 
     @Getter private static TerminalManager terminalManager;
     @Getter private static InputManager inputManager;
 
-    private static SceneManager sceneManager;
+    @Getter private static SceneManager sceneManager;
     @Getter private static Player player;
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -31,11 +32,18 @@ public class Main {
 
 //        CircularMapManager mapManager = new CircularMapManager();
 //        mapManager.generateCircularMap();
-        MapManager mapManager = new MapManager();
-        mapManager.generateMaps();
-        //sceneManager.setScene(Scenes.GAME_START_INTRO.getScene());
-        //sceneManager.setScene(Scenes.MAIN_MENU.getScene());
+//        MapManager mapManager = new MapManager();
+//        mapManager.generateMaps();
+        sceneManager.setScene(Scenes.GAME_START_INTRO.getScene());
+        sceneManager.setScene(Scenes.MAIN_MENU.getScene());
+        while (true) {
+            try {
+                Thread.sleep(new Random().nextLong(250,3000));
+            } catch (InterruptedException e) {
+            }
+            Main.getSceneManager().draw(false);
 
+        }
         //sceneManager.getCurrentScene().draw();
 //        inputManager.getInput("Enter name:", StringPatterns.NAME, text -> {
 //            System.out.println("Szasz tesó: " + text);
