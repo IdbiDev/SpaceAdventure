@@ -15,16 +15,7 @@ import me.idbi.spaceadventure.terminal.TerminalManager;
 public class MainMenuScene implements Scene {
 
     @Override
-    public void draw() {
-//        Main.getTerminalManager().toUnderline();
-//        Main.getTerminalManager().center("Space Adventure", TerminalManager.Color.CYAN);
-//        Main.getTerminalManager().moveCursorDown(1);
-//        Main.getTerminalManager().hideCursor();
-        for (int i = 0; i < 4; i++) {
-            GlitchEffect.playEffect();
-        }
-        Main.getTerminalManager().home();
-        Main.getTerminalManager().hideCursor();
+    public void setup() {
         Table table = new Table();
 
         Column titleColumn = new Column(15);
@@ -42,7 +33,20 @@ public class MainMenuScene implements Scene {
 
         table.addRows(new Row(), title1, title2, title3, title4, title5, title6, title7, title8, new Row());
 
-        TableRenderer renderer = new TableRenderer(table);
+        Main.getSceneManager().setTable(table);
+    }
+
+    @Override
+    public void draw() {
+//        Main.getTerminalManager().toUnderline();
+//        Main.getTerminalManager().center("Space Adventure", TerminalManager.Color.CYAN);
+//        Main.getTerminalManager().moveCursorDown(1);
+//        Main.getTerminalManager().hideCursor();
+
+        Main.getTerminalManager().home();
+        Main.getTerminalManager().hideCursor();
+
+        TableRenderer renderer = Main.getSceneManager().getTable().getRenderer();
         int tempY = renderer.getYOffset();
         for (String s : renderer.render()) {
             int xOffset = Main.getTerminalManager().getWidth() / 2;
@@ -51,13 +55,10 @@ public class MainMenuScene implements Scene {
                 tempOffset--;
             xOffset -= tempOffset;
             Main.getTerminalManager().moveCursor(tempY, xOffset);
-            // teso tul jo vagyok ofc nem printelek random
-            //System.out.print(s);
-
             Main.getTerminalManager().print(s);
+            //System.out.print(s);
             tempY++;
         }
-
 
 
     }

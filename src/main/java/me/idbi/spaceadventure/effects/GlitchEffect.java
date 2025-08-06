@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class GlitchEffect {
+public class GlitchEffect implements IEffect {
 
-    public static void playEffect() {
+    @Override
+    public void playEffect() {
         TerminalManager tm = Main.getTerminalManager();
         tm.home();
         List<Map.Entry<Integer, Integer>> indexes = new ArrayList<>();
@@ -20,7 +21,7 @@ public class GlitchEffect {
                 int colRandom = random.nextInt(1, tm.getWidth());
                 tm.moveCursor(rowRandom, colRandom);
                 for (int i1 = 0; i1 < 7; i1++) {
-                    Main.getTerminalManager().print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
+                    System.out.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
                     //System.out.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
                     indexes.add(Map.entry(rowRandom, colRandom + i1));
                     //tm.moveCursorRight(1);
@@ -29,11 +30,12 @@ public class GlitchEffect {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
+                System.out.println("kys");
             }
 
             for (Map.Entry<Integer, Integer> index : indexes) {
                 tm.moveCursor(index.getKey(), index.getValue());
-                Main.getTerminalManager().print(" ");
+                System.out.print(" ");
                 //System.out.print(" ");
             }
 

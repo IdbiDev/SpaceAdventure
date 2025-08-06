@@ -6,6 +6,11 @@ import me.idbi.spaceadventure.terminal.TerminalManager;
 
 public class GameStartIntroScene implements Scene{
     @Override
+    public void setup() {
+
+    }
+
+    @Override
     public void draw() {
         TerminalManager tm = Main.getTerminalManager();
         tm.clear();

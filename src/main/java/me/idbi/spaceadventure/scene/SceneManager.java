@@ -1,31 +1,41 @@
 package me.idbi.spaceadventure.scene;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.idbi.spaceadventure.Main;
-import me.idbi.spaceadventure.terminal.TerminalManager;
+import me.idbi.spaceadventure.table.Table;
 
+@Getter
 public class SceneManager {
 
-    @Getter private Scene currentScene;
+    private Scene currentScene;
+    @Setter private Table table;
+    // Is the scene currently drawing (For overlay purposes
+    private boolean drawing;
+    private Thread thread;
+
+
 
     public SceneManager() {
-        currentScene = Scenes.GAME_START_INTRO.getScene();
+        thread = new Thread(new SceneUpdater());
+        thread.start();
     }
 
     public void setScene(Scene scene) {
+        scene.setup();
         this.currentScene = scene;
+
         draw(true);
     }
 
     public void draw(boolean clear) {
-        Main.getTerminalManager().home();
-        System.out.print(TerminalManager.Cursor.HOME);
-        System.out.print(TerminalManager.Screen.CLEAR);
+        drawing = true;
+        Main.getTerminalManager().homeRaw();
 
         if(clear)
             Main.getTerminalManager().clear();
         currentScene.draw();
-        Main.getTerminalManager().flip();
+        drawing = false;
 
 
     }

@@ -22,13 +22,16 @@ public class TerminalManager {
     private final TerminalResizeListener terminalResizeListener;
     private final Thread terminalResizeThread;
 
+    private FrameBuffer backBuffer;
+    private FrameBuffer frontBuffer;
+
+
     @Setter
     private boolean spacePressed;
 
-    private FrameBuffer displayBuffer;
-    private FrameBuffer backendBuffer;
 
     public interface TerminalFormatter {
+        String getCode();
     }
 
     @Getter
@@ -163,9 +166,8 @@ public class TerminalManager {
     }
 
     public void moveCursor(int row, int column) {
-        backendBuffer.setCursorPosRows(row);
-        backendBuffer.setCursorPosCols(column);
-        //Main.getTerminalManager().getBackendBuffer().setCursorPosRows(tempY);
+        backBuffer.setCursorPosRows(row);
+        backBuffer.setCursorPosCols(column);
         //System.out.print(Cursor.TO_POSITION.format(row, column));
     }
 
@@ -178,12 +180,13 @@ public class TerminalManager {
     }
 
     public void moveCursorLeft(int n) {
-        System.out.print(Cursor.BACKWARD.format(n));
+        //System.out.print(Cursor.BACKWARD.format(n));
+        backBuffer.setCursorPosCols(backBuffer.getCursorPosCols() - n);
     }
 
     public void moveCursorRight(int n) {
-        backendBuffer.setCursorPosCols(backendBuffer.getCursorPosCols() + n);
         //System.out.print(Cursor.FORWARD.format(n));
+        backBuffer.setCursorPosCols(backBuffer.getCursorPosCols() + n);
     }
 
     public void saveCursor() {
@@ -201,8 +204,8 @@ public class TerminalManager {
     public void clear() {
         try {
             if (isWindows) {
-
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                return;
+                //new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else {
                 new ProcessBuilder("clear").inheritIO().start().waitFor();
             }
@@ -211,27 +214,30 @@ public class TerminalManager {
         }
     }
 
-//    public void toBold() {
-//        System.out.print(Style.BOLD);
-//    }
-//
-//    public void toUnderline() {
-//        System.out.print(Style.UNDERLINE);
-//    }
-//
-//    public void toItalic() {
-//        System.out.print(Style.ITALIC);
-//    }
+    public void toBold() {
+        System.out.print(Style.BOLD);
+    }
+
+    public void toUnderline() {
+        System.out.print(Style.UNDERLINE);
+    }
+
+    public void toItalic() {
+        System.out.print(Style.ITALIC);
+    }
 
     public void resetStyle() {
         System.out.print(Style.RESET);
     }
 
-    public void home() {
-        backendBuffer.setCursorPosCols(0);
-        backendBuffer.setCursorPosRows(0);
-        //System.out.print(Cursor.HOME);
+    public void homeRaw() {
+        System.out.print(Cursor.HOME);
     }
+    public void home() {
+        frontBuffer.reset();
+        backBuffer.reset();
+    }
+
 
     public int getWidth() {
         return terminal.getWidth();
@@ -251,7 +257,7 @@ public class TerminalManager {
      */
     public void setBackgroundColor(Color color) {
         clear();
-        home();
+        homeRaw();
         System.out.print(color);
         for (int i = 0; i < getHeight(); i++) {
             for (int i1 = 0; i1 < getWidth(); i1++) {
@@ -259,6 +265,7 @@ public class TerminalManager {
             }
             System.out.println();
         }
+        homeRaw();
         home();
     }
 
@@ -283,26 +290,21 @@ public class TerminalManager {
         resetStyle();
     }
 
+    public void print(String text) {
+        backBuffer.print(text);
+    }
+    public void println(String text) {
+        backBuffer.println(text);
+    }
 
     public void flip() {
-        for (int y = 0; y <= displayBuffer.getHeight(); y++) {
-            for(int x = 0; x<=displayBuffer.getWidth();x++){
-                char displayedChar = displayBuffer.get(y,x);
-                char backEndChar = backendBuffer.get(y,x);
-                if(displayedChar == backEndChar)
-                    continue;
-                displayBuffer.set(y,x,backEndChar);
-            }
+        for (StringBuilder builder : backBuffer.getBuffer()) {
+            System.out.println(builder.toString());
         }
+
+        //System.out.println("Elapsed time: " + (System.currentTimeMillis() - asd) + "==============================================");
     }
 
-
-    public void println(String string) {
-        backendBuffer.println(string);
-    }
-    public void print(String string) {
-        backendBuffer.print(string);
-    }
 
     public void clearLine() {
         System.out.print("\r" + Screen.CLEAR_LINE);
@@ -323,9 +325,8 @@ public class TerminalManager {
         terminalResizeThread = new Thread(this.terminalResizeListener);
         terminalResizeThread.start();
 
-        displayBuffer = new FrameBuffer(getHeight(),getWidth());
-        backendBuffer = new FrameBuffer(getHeight(),getWidth());
-
+        backBuffer = new FrameBuffer(terminal.getHeight(),terminal.getWidth());
+        frontBuffer = new FrameBuffer(terminal.getHeight(),terminal.getWidth());
 
     }
 
@@ -352,8 +353,7 @@ public class TerminalManager {
                     //Main.debug("Terminal size changed");
                     lastWidth = terminal.getWidth();
                     lastHeight = terminal.getHeight();
-                    Main.getTerminalManager().displayBuffer.resize(lastHeight, lastWidth);
-                    Main.getTerminalManager().backendBuffer.resize(lastHeight, lastWidth);
+
                 }
                 if(lastWidth < 200 || lastHeight < 45) {
                     Main.getTerminalManager().clear();
