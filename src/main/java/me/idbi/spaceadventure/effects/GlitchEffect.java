@@ -41,10 +41,4 @@ public class GlitchEffect implements IEffect {
 
             indexes.clear();
     }
-
-//    private static String getRandomChar() {
-//        String chars = "&#*<>";
-//        Random rand = new Random();
-//        return chars.toCharArray()[rand.nextInt(chars.length())] +"";
-//    }
 }

@@ -133,9 +133,17 @@ public class KeyboardListener implements Runnable {
                         break;
                     }
                     case ARROW_UP: {
+                        if (Main.getSceneManager().getTable() != null) {
+                            Main.getSceneManager().getTable().getSelector().up();
+                            Main.getSceneManager().draw(false);
+                        }
                         break;
                     }
                     case ARROW_DOWN: {
+                        if (Main.getSceneManager().getTable() != null) {
+                            Main.getSceneManager().getTable().getSelector().down();
+                            Main.getSceneManager().draw(false);
+                        }
                         break;
                     }
                     case ARROW_LEFT: {
@@ -145,7 +153,7 @@ public class KeyboardListener implements Runnable {
                         break;
                     }
                     case SPACE: {
-                        if(!this.inputMode && Main.getPlayer().getDialog() != null) {
+                        if (!this.inputMode && Main.getPlayer().getDialog() != null) {
                             Main.getPlayer().getDialog().setSkip(true);
                         }
                         break;

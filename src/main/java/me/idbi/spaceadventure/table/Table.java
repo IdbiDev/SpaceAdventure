@@ -13,11 +13,13 @@ public class Table {
     private final List<Column> columns;
     private final List<Row> rows;
     private final TableSelector selector;
+    private final TableRenderer renderer;
 
     public Table() {
         rows = new ArrayList<>();
         columns = new ArrayList<>();
         selector = new TableSelector(this);
+        renderer = new TableRenderer(this);
     }
 
     public void addRows(Row... rows) {

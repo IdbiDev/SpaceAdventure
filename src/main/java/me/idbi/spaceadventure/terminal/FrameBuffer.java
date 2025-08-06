@@ -67,7 +67,7 @@ public class FrameBuffer {
             System.arraycopy(buffer[r], 0, newBuffer[r], 0, Math.min(width, newCols));
         }
 
-        this.buffer = newBuffer;
+        //this.buffer = newBuffer;
         this.height = newRows;
         this.width = newCols;
     }
