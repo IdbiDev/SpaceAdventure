@@ -18,7 +18,7 @@ public class SceneManager {
 
     public SceneManager() {
         thread = new Thread(new SceneUpdater());
-        thread.start();
+
     }
 
     public void setScene(Scene scene) {

@@ -41,6 +41,7 @@ public class Main {
 //        mapManager.generateMaps();
         //sceneManager.setScene(Scenes.GAME_START_INTRO.getScene());
         sceneManager.setScene(Scenes.MAIN_MENU.getScene());
+        sceneManager.getThread().start();
 //        while (true) {
 //            try {
 //                Thread.sleep(new Random().nextLong(250,3000));

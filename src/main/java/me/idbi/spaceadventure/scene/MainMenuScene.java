@@ -44,7 +44,7 @@ public class MainMenuScene implements Scene {
 //        Main.getTerminalManager().hideCursor();
 
         Main.getTerminalManager().home();
-        Main.getTerminalManager().hideCursor();
+        //Main.getTerminalManager().hideCursor();
 
         TableRenderer renderer = Main.getSceneManager().getTable().getRenderer();
         int tempY = renderer.getYOffset();
@@ -59,7 +59,6 @@ public class MainMenuScene implements Scene {
             //System.out.print(s);
             tempY++;
         }
-
-
+        //Main.getTerminalManager().print(Main.getTerminalManager().getHeight() + ":Y  X:" + Main.getTerminalManager().getWidth());
     }
 }

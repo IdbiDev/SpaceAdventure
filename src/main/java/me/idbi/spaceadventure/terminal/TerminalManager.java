@@ -1,9 +1,6 @@
 package me.idbi.spaceadventure.terminal;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import me.idbi.spaceadventure.Main;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
@@ -22,8 +19,7 @@ public class TerminalManager {
     private final TerminalResizeListener terminalResizeListener;
     private final Thread terminalResizeThread;
 
-    private FrameBuffer backBuffer;
-    private FrameBuffer frontBuffer;
+    private FrameBuffer frameBuffer;
 
 
     @Setter
@@ -85,7 +81,6 @@ public class TerminalManager {
     @Getter
     @AllArgsConstructor
     public static enum Screen implements TerminalFormatter {
-        CLEAR("\u001B[2J"),
         CLEAR_LINE("\u001B[K"),
         SIZE("\u001B[8;%d;%d"); // rows, columns
 
@@ -166,9 +161,17 @@ public class TerminalManager {
     }
 
     public void moveCursor(int row, int column) {
-        backBuffer.setCursorPosRows(row);
-        backBuffer.setCursorPosCols(column);
+        frameBuffer.setCursorRow(row);
+        frameBuffer.setCursorColumn(column);
+        //backBuffer.setCursorPosRows(row);
+        //backBuffer.setCursorPosCols(column);
         //System.out.print(Cursor.TO_POSITION.format(row, column));
+    }
+    public void moveCursorRaw(int row, int column) {
+
+        //backBuffer.setCursorPosRows(row);
+        //backBuffer.setCursorPosCols(column);
+        System.out.print(Cursor.TO_POSITION.format(row, column));
     }
 
     public void moveCursorUp(int n) {
@@ -181,12 +184,13 @@ public class TerminalManager {
 
     public void moveCursorLeft(int n) {
         //System.out.print(Cursor.BACKWARD.format(n));
-        backBuffer.setCursorPosCols(backBuffer.getCursorPosCols() - n);
+        //backBuffer.setCursorPosCols(backBuffer.getCursorPosCols() - n);
     }
 
     public void moveCursorRight(int n) {
+        frameBuffer.setCursorColumn(frameBuffer.getCursorColumn() + n);
         //System.out.print(Cursor.FORWARD.format(n));
-        backBuffer.setCursorPosCols(backBuffer.getCursorPosCols() + n);
+        //backBuffer.setCursorPosCols(backBuffer.getCursorPosCols() + n);
     }
 
     public void saveCursor() {
@@ -204,11 +208,11 @@ public class TerminalManager {
     public void clear() {
         try {
             if (isWindows) {
-                return;
-                //new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else {
                 new ProcessBuilder("clear").inheritIO().start().waitFor();
             }
+            frameBuffer.clear();
         } catch (final Exception ignored) {
             //  Handle any exceptions.
         }
@@ -232,10 +236,13 @@ public class TerminalManager {
 
     public void homeRaw() {
         System.out.print(Cursor.HOME);
+        home();
     }
     public void home() {
-        frontBuffer.reset();
-        backBuffer.reset();
+       // frontBuffer.reset();
+        //backBuffer.reset();
+        frameBuffer.setCursorColumn(0);
+        frameBuffer.setCursorRow(0);
     }
 
 
@@ -291,17 +298,34 @@ public class TerminalManager {
     }
 
     public void print(String text) {
-        backBuffer.print(text);
+        frameBuffer.print(text);
     }
     public void println(String text) {
-        backBuffer.println(text);
+        frameBuffer.println(text);
     }
 
+    @SneakyThrows
     public void flip() {
-        for (StringBuilder builder : backBuffer.getBuffer()) {
+        /*for (StringBuilder builder : backBuffer.getBuffer()) {
             System.out.println(builder.toString());
-        }
+        }*/
+        int i = 0;
+        moveCursor(0,0);
+        moveCursorRaw(0,0);
+        for (FrameRow row : frameBuffer.getRows()) {
+            StringBuilder builder = new StringBuilder();
+            for (FrameElement element : row.getElements()) {
+//                if(element.toString().equals(" ")){
+//                    Thread.sleep(5);
+//                }else
+//                    Thread.sleep(75);
 
+                //System.out.print(element.toString().equals(" ") ? "|" : element);
+                builder.append(element.toString());
+            }
+            System.out.println(builder.toString());
+            Thread.sleep(100);
+        }
         //System.out.println("Elapsed time: " + (System.currentTimeMillis() - asd) + "==============================================");
     }
 
@@ -324,9 +348,9 @@ public class TerminalManager {
         this.terminalResizeListener = new TerminalResizeListener(this);
         terminalResizeThread = new Thread(this.terminalResizeListener);
         terminalResizeThread.start();
-
-        backBuffer = new FrameBuffer(terminal.getHeight(),terminal.getWidth());
-        frontBuffer = new FrameBuffer(terminal.getHeight(),terminal.getWidth());
+        frameBuffer = new FrameBuffer(getHeight(),getWidth());
+        //backBuffer = new FrameBuffer(terminal.getHeight(),terminal.getWidth());
+        //frontBuffer = new FrameBuffer(terminal.getHeight(),terminal.getWidth());
 
     }
 
