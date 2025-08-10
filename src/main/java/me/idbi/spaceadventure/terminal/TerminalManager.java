@@ -167,6 +167,7 @@ public class TerminalManager {
         //backBuffer.setCursorPosCols(column);
         //System.out.print(Cursor.TO_POSITION.format(row, column));
     }
+
     public void moveCursorRaw(int row, int column) {
 
         //backBuffer.setCursorPosRows(row);
@@ -237,8 +238,9 @@ public class TerminalManager {
     public void homeRaw() {
         System.out.print(Cursor.HOME);
     }
+
     public void home() {
-       // frontBuffer.reset();
+        // frontBuffer.reset();
         //backBuffer.reset();
         frameBuffer.setCursorColumn(0);
         frameBuffer.setCursorRow(0);
@@ -299,6 +301,7 @@ public class TerminalManager {
     public void print(String text) {
         frameBuffer.print(text);
     }
+
     public void println(String text) {
         frameBuffer.println(text);
     }
@@ -338,7 +341,7 @@ public class TerminalManager {
         this.terminalResizeListener = new TerminalResizeListener(this);
         terminalResizeThread = new Thread(this.terminalResizeListener);
         terminalResizeThread.start();
-        frameBuffer = new FrameBuffer(getHeight(),getWidth());
+        frameBuffer = new FrameBuffer(getHeight(), getWidth());
         //backBuffer = new FrameBuffer(terminal.getHeight(),terminal.getWidth());
         //frontBuffer = new FrameBuffer(terminal.getHeight(),terminal.getWidth());
 
@@ -369,7 +372,7 @@ public class TerminalManager {
                     lastHeight = terminal.getHeight();
 
                 }
-                if(lastWidth < 200 || lastHeight < 45) {
+                if (lastWidth < 200 || lastHeight < 45) {
                     Main.getTerminalManager().clear();
                     System.out.println(lastWidth + " " + lastHeight);
                     System.out.println("Terminal Size error!!!");

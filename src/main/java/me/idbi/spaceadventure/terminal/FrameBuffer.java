@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import me.idbi.spaceadventure.Main;
+import me.idbi.spaceadventure.debug.Debug;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +34,6 @@ public class FrameBuffer {
         this.rows = new ArrayList<>();
         clear();
     }
-
 
 
     public void set(String s, int row, int column) {
@@ -162,21 +162,22 @@ public class FrameBuffer {
         buf.print(TerminalManager.Color.YELLOW.getCode() + "GECI ");
         buf.print(TerminalManager.Color.GREEN.getCode() + "KURVAAA" + TerminalManager.Style.RESET);
         buf.print(" KUKI");
-        try{
-        while(true) {
-            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            System.out.print(TerminalManager.Cursor.HOME);
-            for (FrameRow row : buf.getRows()) {
-                StringBuilder b = new StringBuilder();
-                for (FrameElement element : row.getElements()) {
-                    b.append(element.toString());;
-                }
-                System.out.println(b);
-                System.out.flush();
+        try {
+            while (true) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                System.out.print(TerminalManager.Cursor.HOME);
+                for (FrameRow row : buf.getRows()) {
+                    StringBuilder b = new StringBuilder();
+                    for (FrameElement element : row.getElements()) {
+                        b.append(element.toString());
+                        ;
+                    }
+                    System.out.println(b);
+                    System.out.flush();
 
+                }
             }
-        }
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
