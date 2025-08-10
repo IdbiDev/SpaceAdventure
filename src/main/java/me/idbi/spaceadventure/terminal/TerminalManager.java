@@ -236,7 +236,6 @@ public class TerminalManager {
 
     public void homeRaw() {
         System.out.print(Cursor.HOME);
-        home();
     }
     public void home() {
        // frontBuffer.reset();
@@ -306,25 +305,16 @@ public class TerminalManager {
 
     @SneakyThrows
     public void flip() {
-        /*for (StringBuilder builder : backBuffer.getBuffer()) {
-            System.out.println(builder.toString());
-        }*/
-        int i = 0;
-        moveCursor(0,0);
-        moveCursorRaw(0,0);
+        int i = 1;
+        moveCursorRaw(i, 0);
+        StringBuilder builder = new StringBuilder();
         for (FrameRow row : frameBuffer.getRows()) {
-            StringBuilder builder = new StringBuilder();
-            for (FrameElement element : row.getElements()) {
-//                if(element.toString().equals(" ")){
-//                    Thread.sleep(5);
-//                }else
-//                    Thread.sleep(75);
-
-                //System.out.print(element.toString().equals(" ") ? "|" : element);
+            for (FrameElement element : row.snapshotElements()) {
                 builder.append(element.toString());
             }
-            System.out.println(builder.toString());
-            Thread.sleep(100);
+            System.out.print(builder);
+            builder.setLength(0);
+            moveCursorRaw(++i, 0);
         }
         //System.out.println("Elapsed time: " + (System.currentTimeMillis() - asd) + "==============================================");
     }

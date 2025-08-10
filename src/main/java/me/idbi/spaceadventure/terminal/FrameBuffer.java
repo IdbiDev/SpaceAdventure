@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,51 +24,65 @@ public class FrameBuffer {
 
     private int width;
     private int height;
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     public FrameBuffer(int height, int width) {
         this.priority = 0;
         this.width = width;
         this.height = height;
-        this.rows = new CopyOnWriteArrayList<>();
+        this.rows = new ArrayList<>();
         clear();
     }
 
 
 
     public void set(String s, int row, int column) {
+
         List<FrameElement> elements = new ArrayList<>(getElements(s));
 
         FrameRow frameRow = this.rows.get(row);
     }
 
     public char get(int row, int column) {
-        return this.rows.get(row).getElements().get(column).getString();
+        lock.readLock().lock();
+        try {
+            return this.rows.get(row).snapshotElements().get(column).getString();
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 
     public void println(String s) {
         print(s);
         cursorRow++;
         cursorColumn = 0;
-        if(cursorRow >= height) {
-            cursorRow = height;
-        }
+        if (cursorRow >= height)
+            cursorRow = height - 1; // ne lépj ki
     }
 
     public void print(String s) {
-        List<FrameElement> elements = new ArrayList<>(getElements(s));
-        List<FrameElement> rowElements = this.rows.get(cursorRow).getElements();
+        lock.writeLock().lock();
+        try {
+            List<FrameElement> elements = new ArrayList<>(getElements(s));
+            List<FrameElement> rowElements = this.rows.get(cursorRow).getElements();
 
-        List<FrameElement> newElements = rowElements.subList(0, cursorColumn);
-        newElements.addAll(elements);
+            for (int i = 0; i < elements.size(); i++) {
+                try {
+                    rowElements.set(i + cursorColumn, elements.get(i));
+                } catch (IndexOutOfBoundsException e) {}
+            }
 
-        if(newElements.size() >= width) {
-            newElements = newElements.subList(0, width);
-        }
+            if (rowElements.size() >= width) {
+                rowElements = rowElements.subList(0, width);
+            }
 
-        this.rows.get(cursorRow).setElements(newElements);
-        cursorColumn += elements.size();
-        if(cursorColumn >= width) {
-            cursorColumn = width;
+            this.rows.get(cursorRow).setElements(rowElements);
+            cursorColumn += elements.size();
+            if (cursorColumn >= width) {
+                cursorColumn = width;
+            }
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 
@@ -124,17 +138,20 @@ public class FrameBuffer {
     }
 
     public void clear() {
-        this.cursorColumn = 0;
-        this.cursorRow = 0;
-
-        this.rows.clear();
-        for (int y = 0; y < height; y++) {
-            FrameRow frameRow = new FrameRow();
-            for (int x = 0; x < width; x++) {
-                FrameElement e = new FrameElement('|');
-                frameRow.getElements().add(e);
+        lock.writeLock().lock();
+        try {
+            this.cursorColumn = 0;
+            this.cursorRow = 0;
+            this.rows.clear();
+            for (int y = 0; y < height; y++) {
+                FrameRow frameRow = new FrameRow();
+                for (int x = 0; x < width; x++) {
+                    frameRow.getElements().add(new FrameElement(' '));
+                }
+                this.rows.add(frameRow);
             }
-            this.rows.add(frameRow);
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 

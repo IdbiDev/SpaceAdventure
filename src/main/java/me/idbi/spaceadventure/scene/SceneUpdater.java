@@ -22,7 +22,7 @@ public class SceneUpdater implements Runnable {
             }
 
             if(lastUpdateNoClear < unixTime) {
-                lastUpdateNoClear = unixTime + 1L;
+                lastUpdateNoClear = unixTime + 20L;
                 Main.getSceneManager().draw(false);
                 Main.getTerminalManager().homeRaw();
                 Main.getTerminalManager().flip();

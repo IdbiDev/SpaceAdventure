@@ -43,11 +43,11 @@ public class MainMenuScene implements Scene {
 //        Main.getTerminalManager().moveCursorDown(1);
 //        Main.getTerminalManager().hideCursor();
 
-        Main.getTerminalManager().home();
-        //Main.getTerminalManager().hideCursor();
+//        Main.getTerminalManager().home();
+        Main.getTerminalManager().hideCursor();
 
         TableRenderer renderer = Main.getSceneManager().getTable().getRenderer();
-        int tempY = renderer.getYOffset();
+        int tempY = 0;
         for (String s : renderer.render()) {
             int xOffset = Main.getTerminalManager().getWidth() / 2;
             int tempOffset = Utils.purifyRow(s).length() / 2;

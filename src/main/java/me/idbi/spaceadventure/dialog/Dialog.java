@@ -24,6 +24,7 @@ public class Dialog {
             if(part instanceof DialogBuilder.DialogText dialogText) {
                 for (char c : dialogText.getText().toCharArray()) {
                     this.buffer += c;
+
                     System.out.print("\r" + this.buffer);
                     try {
                         if(!this.skip)

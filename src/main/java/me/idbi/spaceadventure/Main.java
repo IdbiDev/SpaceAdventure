@@ -1,6 +1,7 @@
 package me.idbi.spaceadventure;
 
 import lombok.Getter;
+import me.idbi.spaceadventure.debug.Debug;
 import me.idbi.spaceadventure.effects.EffectManager;
 import me.idbi.spaceadventure.effects.GlitchEffect;
 import me.idbi.spaceadventure.map.MapManager;
@@ -23,6 +24,8 @@ public class Main {
     @Getter private static Player player;
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        Debug.initDebug();
+        Debug.printDebug("CICA");
         terminalManager = new TerminalManager();
         sceneManager = new SceneManager();
         inputManager = new InputManager();
@@ -31,6 +34,7 @@ public class Main {
         terminalManager.clear();
         terminalManager.homeRaw();
         Runnable exit = () -> {
+            Debug.closeDebug();
             System.out.println("DONE");
         };
         //terminalManager.println( TerminalManager.Color.BRIGHT_CYAN_BACKGROUND.getCode() + TerminalManager.Color.RED.getCode() + "KYSSSSSSS");

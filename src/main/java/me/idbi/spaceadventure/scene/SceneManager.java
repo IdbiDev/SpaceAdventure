@@ -30,8 +30,6 @@ public class SceneManager {
 
     public void draw(boolean clear) {
         drawing = true;
-        Main.getTerminalManager().homeRaw();
-
         if(clear)
             Main.getTerminalManager().clear();
         currentScene.draw();

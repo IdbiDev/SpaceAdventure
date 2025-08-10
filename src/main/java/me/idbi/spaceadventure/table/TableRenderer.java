@@ -25,7 +25,7 @@ public class TableRenderer {
 
     public TableRenderer(int xOffset, int yOffset) {
         this.xOffset = xOffset;
-        this.yOffset = yOffset + 1;
+        this.yOffset = yOffset;
     }
 
     public List<String> render() {

@@ -3,36 +3,64 @@ package me.idbi.spaceadventure.terminal;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@Setter
-@Getter
 public class FrameRow {
 
-    private List<FrameElement> elements;
+    @Getter private List<FrameElement> elements;
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     public FrameRow() {
-        elements = new CopyOnWriteArrayList<>();
+        elements = new ArrayList<>();
     }
 
     public FrameRow(FrameElement element) {
-        elements = new CopyOnWriteArrayList<>(Collections.singletonList(element));
+        elements = new ArrayList<>(Collections.singletonList(element));
     }
 
     public FrameRow(List<FrameElement> elements) {
-        this.elements = new CopyOnWriteArrayList<>(elements);
+        this.elements = new ArrayList<>(elements);
     }
 
     public FrameRow append(String code, char string) {
-        this.elements.add(new FrameElement(code, string));
+        lock.writeLock().lock();
+        try {
+            this.elements.add(new FrameElement(code, string));
+        }finally {
+            lock.writeLock().unlock();
+        }
         return this;
     }
 
+    public void setElements(List<FrameElement> newElems) {
+        lock.writeLock().lock();
+        try {
+            this.elements = new ArrayList<>(newElems);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+    public List<FrameElement> snapshotElements() {
+        lock.readLock().lock();
+        try {
+            return new ArrayList<>(elements);
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
     public FrameRow append(FrameElement element) {
-        this.elements.add(element);
-        return this;
+        lock.writeLock().lock();
+        try {
+            this.elements.add(element);
+            return this;
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     public FrameRow append(char string) {
