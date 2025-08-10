@@ -4,6 +4,8 @@ import lombok.Getter;
 import me.idbi.spaceadventure.debug.Debug;
 import me.idbi.spaceadventure.effects.EffectManager;
 import me.idbi.spaceadventure.effects.GlitchEffect;
+import me.idbi.spaceadventure.frame.FrameBuffer;
+import me.idbi.spaceadventure.frame.FrameManager;
 import me.idbi.spaceadventure.map.MapManager;
 import me.idbi.spaceadventure.player.Player;
 import me.idbi.spaceadventure.scene.SceneManager;
@@ -19,12 +21,12 @@ public class Main {
     @Getter private static TerminalManager terminalManager;
     @Getter private static InputManager inputManager;
     @Getter private static EffectManager effectManager;
-
+    @Getter private static FrameManager frameManager;
     @Getter private static SceneManager sceneManager;
     @Getter private static Player player;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Debug.initDebug();
+        //Debug.initDebug();
         Debug.printDebug("CICA");
         terminalManager = new TerminalManager();
         sceneManager = new SceneManager();
@@ -32,7 +34,6 @@ public class Main {
         effectManager = new EffectManager();
         player = new Player("null",null);
         terminalManager.clear();
-        terminalManager.homeRaw();
         Runnable exit = () -> {
             Debug.closeDebug();
             System.out.println("DONE");
@@ -46,14 +47,16 @@ public class Main {
         //sceneManager.setScene(Scenes.GAME_START_INTRO.getScene());
         sceneManager.setScene(Scenes.MAIN_MENU.getScene());
         sceneManager.getThread().start();
-//        while (true) {
-//            try {
-//                Thread.sleep(new Random().nextLong(250,3000));
-//                for (int i = 0; i < 4; i++) {
-//                    Main.getEffectManager().queue(new GlitchEffect());
-//                }
-//            } catch (InterruptedException e) {
-//            }
+        while (true) {
+            try {
+                Thread.sleep(new Random().nextLong(250, 3000));
+                GlitchEffect eff = new GlitchEffect();
+                for (int i = 0; i < 4; i++) {
+                    effectManager.queue(eff);
+                }
+            } catch (InterruptedException e) {
+            }
+        }
 //            //Main.getSceneManager().draw(false);
 //
 //        }

@@ -1,12 +1,10 @@
-package me.idbi.spaceadventure.terminal;
+package me.idbi.spaceadventure.frame;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class FrameRow {

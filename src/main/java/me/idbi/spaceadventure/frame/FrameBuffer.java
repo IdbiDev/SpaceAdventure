@@ -1,16 +1,11 @@
-package me.idbi.spaceadventure.terminal;
+package me.idbi.spaceadventure.frame;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import me.idbi.spaceadventure.Main;
-import me.idbi.spaceadventure.debug.Debug;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +22,8 @@ public class FrameBuffer {
     private int height;
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
+    @Setter private boolean needUpdate;
+
     public FrameBuffer(int height, int width) {
         this.priority = 0;
         this.width = width;
@@ -35,18 +32,10 @@ public class FrameBuffer {
         clear();
     }
 
-
-    public void set(String s, int row, int column) {
-
-        List<FrameElement> elements = new ArrayList<>(getElements(s));
-
-        FrameRow frameRow = this.rows.get(row);
-    }
-
     public char get(int row, int column) {
         lock.readLock().lock();
         try {
-            return this.rows.get(row).snapshotElements().get(column).getString();
+            return this.rows.get(row).getElements().get(column).getString();
         } finally {
             lock.readLock().unlock();
         }
@@ -69,7 +58,8 @@ public class FrameBuffer {
             for (int i = 0; i < elements.size(); i++) {
                 try {
                     rowElements.set(i + cursorColumn, elements.get(i));
-                } catch (IndexOutOfBoundsException e) {}
+                } catch (IndexOutOfBoundsException e) {
+                }
             }
 
             if (rowElements.size() >= width) {
@@ -84,6 +74,7 @@ public class FrameBuffer {
         } finally {
             lock.writeLock().unlock();
         }
+        needUpdate = true;
     }
 
     public List<FrameElement> getElements(String s) {
@@ -154,34 +145,21 @@ public class FrameBuffer {
             lock.writeLock().unlock();
         }
     }
-
-    public static void main(String[] args) {
-        FrameBuffer buf = new FrameBuffer(10, 100);
-
-        buf.println(TerminalManager.Color.RED.getCode() + "FASZ");
-        buf.print(TerminalManager.Color.YELLOW.getCode() + "GECI ");
-        buf.print(TerminalManager.Color.GREEN.getCode() + "KURVAAA" + TerminalManager.Style.RESET);
-        buf.print(" KUKI");
+    public void empty() {
+        lock.writeLock().lock();
         try {
-            while (true) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-                System.out.print(TerminalManager.Cursor.HOME);
-                for (FrameRow row : buf.getRows()) {
-                    StringBuilder b = new StringBuilder();
-                    for (FrameElement element : row.getElements()) {
-                        b.append(element.toString());
-                        ;
-                    }
-                    System.out.println(b);
-                    System.out.flush();
-
+            this.cursorColumn = 0;
+            this.cursorRow = 0;
+            this.rows.clear();
+            for (int y = 0; y < height; y++) {
+                FrameRow frameRow = new FrameRow();
+                for (int x = 0; x < width; x++) {
+                    frameRow.getElements().add(new FrameElement(' ').empty());
                 }
+                this.rows.add(frameRow);
             }
-        } catch (InterruptedException e) {
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } finally {
+            lock.writeLock().unlock();
         }
-
     }
 }

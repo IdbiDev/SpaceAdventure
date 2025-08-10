@@ -2,16 +2,17 @@ package me.idbi.spaceadventure.scene;
 
 import me.idbi.spaceadventure.Main;
 import me.idbi.spaceadventure.dialog.DialogBuilder;
+import me.idbi.spaceadventure.frame.FrameBuffer;
 import me.idbi.spaceadventure.terminal.TerminalManager;
 
 public class GameStartIntroScene implements Scene{
     @Override
-    public void setup() {
+    public void setup(FrameBuffer frameBuffer) {
 
     }
 
     @Override
-    public void draw() {
+    public void draw(FrameBuffer frameBuffer) {
         TerminalManager tm = Main.getTerminalManager();
         tm.clear();
         DialogBuilder dialogBuilder = new DialogBuilder();

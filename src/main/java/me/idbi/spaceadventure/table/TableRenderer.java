@@ -72,15 +72,15 @@ public class TableRenderer {
         return b;
     }
 
-    public void renderFastPlz() {
-        int tempY = this.yOffset;
-
-        for (String s : render()) {
-            Main.getTerminalManager().moveCursor(tempY, xOffset);
-            System.out.print(s);
-            tempY++;
-        }
-    }
+//    public void renderFastPlz() {
+//        int tempY = this.yOffset;
+//
+//        for (String s : render()) {
+//            Main.getTerminalManager().moveCursor(tempY, xOffset);
+//            System.out.print(s);
+//            tempY++;
+//        }
+//    }
 
 //    public Cell getNext(Cell cell) {
 //        boolean next;

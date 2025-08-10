@@ -2,11 +2,15 @@ package me.idbi.spaceadventure.terminal;
 
 import lombok.*;
 import me.idbi.spaceadventure.Main;
+import me.idbi.spaceadventure.frame.FrameBuffer;
+import me.idbi.spaceadventure.frame.FrameElement;
+import me.idbi.spaceadventure.frame.FrameRow;
+import me.idbi.spaceadventure.scene.SceneLayer;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
-import java.awt.*;
 import java.io.IOException;
+import java.util.Map;
 
 @Getter
 public class TerminalManager {
@@ -19,7 +23,6 @@ public class TerminalManager {
     private final TerminalResizeListener terminalResizeListener;
     private final Thread terminalResizeThread;
 
-    private FrameBuffer frameBuffer;
 
 
     @Setter
@@ -160,13 +163,7 @@ public class TerminalManager {
         }
     }
 
-    public void moveCursor(int row, int column) {
-        frameBuffer.setCursorRow(row);
-        frameBuffer.setCursorColumn(column);
-        //backBuffer.setCursorPosRows(row);
-        //backBuffer.setCursorPosCols(column);
-        //System.out.print(Cursor.TO_POSITION.format(row, column));
-    }
+
 
     public void moveCursorRaw(int row, int column) {
 
@@ -175,24 +172,6 @@ public class TerminalManager {
         System.out.print(Cursor.TO_POSITION.format(row, column));
     }
 
-    public void moveCursorUp(int n) {
-        System.out.print(Cursor.UP.format(n));
-    }
-
-    public void moveCursorDown(int n) {
-        System.out.print(Cursor.DOWN.format(n));
-    }
-
-    public void moveCursorLeft(int n) {
-        //System.out.print(Cursor.BACKWARD.format(n));
-        //backBuffer.setCursorPosCols(backBuffer.getCursorPosCols() - n);
-    }
-
-    public void moveCursorRight(int n) {
-        frameBuffer.setCursorColumn(frameBuffer.getCursorColumn() + n);
-        //System.out.print(Cursor.FORWARD.format(n));
-        //backBuffer.setCursorPosCols(backBuffer.getCursorPosCols() + n);
-    }
 
     public void saveCursor() {
         System.out.print(Cursor.SAVE_POSITION);
@@ -213,7 +192,6 @@ public class TerminalManager {
             } else {
                 new ProcessBuilder("clear").inheritIO().start().waitFor();
             }
-            frameBuffer.clear();
         } catch (final Exception ignored) {
             //  Handle any exceptions.
         }
@@ -235,15 +213,8 @@ public class TerminalManager {
         System.out.print(Style.RESET);
     }
 
-    public void homeRaw() {
-        System.out.print(Cursor.HOME);
-    }
-
-    public void home() {
-        // frontBuffer.reset();
-        //backBuffer.reset();
-        frameBuffer.setCursorColumn(0);
-        frameBuffer.setCursorRow(0);
+    public void setDisplayHome() {
+        System.out.print(TerminalManager.Cursor.HOME);
     }
 
 
@@ -259,68 +230,13 @@ public class TerminalManager {
         System.out.print(Style.SHOW_CURSOR);
     }
 
-    /**
-     * @param color background color
-     *              This function will clear the screen!
-     */
-    public void setBackgroundColor(Color color) {
-        clear();
-        homeRaw();
-        System.out.print(color);
-        for (int i = 0; i < getHeight(); i++) {
-            for (int i1 = 0; i1 < getWidth(); i1++) {
-                System.out.print(" ");
-            }
-            System.out.println();
-        }
-        homeRaw();
-        home();
-    }
 
     public void hideCursor() {
         System.out.print(Style.HIDE_CURSOR);
     }
 
-    public void center(String text) {
-        System.out.print(Screen.CLEAR_LINE);
-        moveCursorRight(getWidth() / 2 - text.length() / 2);
-        System.out.print(text);
-    }
 
-    public void center(String text, TerminalFormatter... formats) {
-        System.out.print(Screen.CLEAR_LINE);
-        moveCursorRight(getWidth() / 2 - text.length() / 2);
 
-        for (TerminalFormatter format : formats) {
-            System.out.print(format);
-        }
-        System.out.print(text);
-        resetStyle();
-    }
-
-    public void print(String text) {
-        frameBuffer.print(text);
-    }
-
-    public void println(String text) {
-        frameBuffer.println(text);
-    }
-
-    @SneakyThrows
-    public void flip() {
-        int i = 1;
-        moveCursorRaw(i, 0);
-        StringBuilder builder = new StringBuilder();
-        for (FrameRow row : frameBuffer.getRows()) {
-            for (FrameElement element : row.snapshotElements()) {
-                builder.append(element.toString());
-            }
-            System.out.print(builder);
-            builder.setLength(0);
-            moveCursorRaw(++i, 0);
-        }
-        //System.out.println("Elapsed time: " + (System.currentTimeMillis() - asd) + "==============================================");
-    }
 
 
     public void clearLine() {
@@ -341,7 +257,6 @@ public class TerminalManager {
         this.terminalResizeListener = new TerminalResizeListener(this);
         terminalResizeThread = new Thread(this.terminalResizeListener);
         terminalResizeThread.start();
-        frameBuffer = new FrameBuffer(getHeight(), getWidth());
         //backBuffer = new FrameBuffer(terminal.getHeight(),terminal.getWidth());
         //frontBuffer = new FrameBuffer(terminal.getHeight(),terminal.getWidth());
 

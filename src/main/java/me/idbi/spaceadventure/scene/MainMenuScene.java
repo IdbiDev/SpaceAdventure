@@ -2,6 +2,7 @@ package me.idbi.spaceadventure.scene;
 
 import me.idbi.spaceadventure.Main;
 import me.idbi.spaceadventure.effects.GlitchEffect;
+import me.idbi.spaceadventure.frame.FrameBuffer;
 import me.idbi.spaceadventure.table.Alignment;
 import me.idbi.spaceadventure.table.Table;
 import me.idbi.spaceadventure.table.TableRenderer;
@@ -15,7 +16,7 @@ import me.idbi.spaceadventure.terminal.TerminalManager;
 public class MainMenuScene implements Scene {
 
     @Override
-    public void setup() {
+    public void setup(FrameBuffer frameBuffer) {
         Table table = new Table();
 
         Column titleColumn = new Column(15);
@@ -37,13 +38,13 @@ public class MainMenuScene implements Scene {
     }
 
     @Override
-    public void draw() {
+    public void draw(FrameBuffer frameBuffer) {
 //        Main.getTerminalManager().toUnderline();
 //        Main.getTerminalManager().center("Space Adventure", TerminalManager.Color.CYAN);
 //        Main.getTerminalManager().moveCursorDown(1);
 //        Main.getTerminalManager().hideCursor();
+        frameBuffer.home();
 
-//        Main.getTerminalManager().home();
         Main.getTerminalManager().hideCursor();
 
         TableRenderer renderer = Main.getSceneManager().getTable().getRenderer();
@@ -54,9 +55,16 @@ public class MainMenuScene implements Scene {
             if(tempOffset % 2 == 1)
                 tempOffset--;
             xOffset -= tempOffset;
-            Main.getTerminalManager().moveCursor(tempY, xOffset);
-            Main.getTerminalManager().print(s);
-            //System.out.print(s);
+            frameBuffer.moveCursor(tempY, xOffset);
+            frameBuffer.print(s);
+//            if(tempY == 3) {
+//                Main.getTerminalManager().moveCursor(tempY, xOffset);
+//                Main.getTerminalManager().print("!".repeat(30),5);
+//            }
+//            if(tempY == 4) {
+//                Main.getTerminalManager().moveCursor(3, xOffset);
+//                Main.getTerminalManager().print("?",3);
+//            }
             tempY++;
         }
         //Main.getTerminalManager().print(Main.getTerminalManager().getHeight() + ":Y  X:" + Main.getTerminalManager().getWidth());

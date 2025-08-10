@@ -1,4 +1,4 @@
-package me.idbi.spaceadventure.terminal;
+package me.idbi.spaceadventure.frame;
 
 import lombok.Getter;
 

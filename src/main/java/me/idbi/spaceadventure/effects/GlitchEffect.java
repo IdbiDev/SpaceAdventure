@@ -10,35 +10,27 @@ import java.util.Random;
 
 public class GlitchEffect implements IEffect {
 
+    private final FrameBuffer buffer;
+
+    public GlitchEffect() {
+        this.buffer = Main.getFrameManager().createBuffer(2);
+    }
+
     @Override
     public void playEffect() {
-        TerminalManager tm = Main.getTerminalManager();
-        tm.home();
-        List<Map.Entry<Integer, Integer>> indexes = new ArrayList<>();
-            for (int i = 0; i < 4; i++) {
-                Random random = new Random();
-                int rowRandom = random.nextInt(1, tm.getHeight());
-                int colRandom = random.nextInt(1, tm.getWidth());
-                tm.moveCursor(rowRandom, colRandom);
-                for (int i1 = 0; i1 < 7; i1++) {
-                    System.out.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
-                    //System.out.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
-                    indexes.add(Map.entry(rowRandom, colRandom + i1));
-                    //tm.moveCursorRight(1);
-                }
+        buffer.clear();
+        for (int count = 0; count < 4; count++) {
+            Random random = new Random();
+            int rowRandom = random.nextInt(1, buffer.getHeight());
+            int colRandom = random.nextInt(1, buffer.getWidth());
+            for (int i = 0; i < 7; i++) {
+                buffer.moveCursor(rowRandom, colRandom + i);
+                buffer.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
+                //System.out.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
+                //System.out.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
+               // indexes.add(Map.entry(rowRandom, colRandom + i));
+                //tm.mov
             }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                System.out.println("kys");
-            }
-
-            for (Map.Entry<Integer, Integer> index : indexes) {
-                tm.moveCursor(index.getKey(), index.getValue());
-                System.out.print(" ");
-                //System.out.print(" ");
-            }
-
-            indexes.clear();
+        }
     }
 }

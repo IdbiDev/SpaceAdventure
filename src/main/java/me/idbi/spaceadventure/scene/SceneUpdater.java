@@ -7,7 +7,6 @@ import me.idbi.spaceadventure.terminal.TerminalManager;
 public class SceneUpdater implements Runnable {
 
     private long lastUpdateNoClear;
-    private long lastUpdateClear;
 
     @Override
     public void run() {
@@ -15,19 +14,12 @@ public class SceneUpdater implements Runnable {
             if(Main.getSceneManager().getCurrentScene() == null)
                 continue;
             long unixTime = System.currentTimeMillis();
-            if(lastUpdateClear < unixTime) {
-                lastUpdateClear = unixTime + 2000L;
-                //Main.getSceneManager().draw(true);
-                continue;
-            }
 
-            if(lastUpdateNoClear < unixTime) {
-                lastUpdateNoClear = unixTime + 20L;
+            if( lastUpdateNoClear < unixTime) {
+                lastUpdateNoClear = unixTime + 20;
                 Main.getSceneManager().draw(false);
-                Main.getTerminalManager().homeRaw();
-                Main.getTerminalManager().flip();
-                //Main.getSceneManager().draw(false);
-                continue;
+//                Main.getTerminalManager().homeRaw();
+                Main.getFrameManager().flip();
             }
             try {
                 Thread.sleep(1,500);
