@@ -29,6 +29,7 @@ public class Main {
         //Debug.initDebug();
         Debug.printDebug("CICA");
         terminalManager = new TerminalManager();
+        frameManager = new FrameManager(terminalManager.getHeight(), terminalManager.getWidth());
         sceneManager = new SceneManager();
         inputManager = new InputManager();
         effectManager = new EffectManager();

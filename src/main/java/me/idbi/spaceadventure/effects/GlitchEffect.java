@@ -1,6 +1,8 @@
 package me.idbi.spaceadventure.effects;
 
+import lombok.Getter;
 import me.idbi.spaceadventure.Main;
+import me.idbi.spaceadventure.frame.FrameBuffer;
 import me.idbi.spaceadventure.terminal.TerminalManager;
 
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+@Getter
 public class GlitchEffect implements IEffect {
 
     private final FrameBuffer buffer;

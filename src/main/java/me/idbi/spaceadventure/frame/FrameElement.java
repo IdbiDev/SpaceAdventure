@@ -8,14 +8,23 @@ public class FrameElement {
     private String code;
     private char string;
 
+    private boolean empty;
+
     public FrameElement(String code, char string) {
         this.code = code;
         this.string = string;
+        this.empty = false;
     }
 
     public FrameElement(char string) {
         this.code = "";
         this.string = string;
+        this.empty = false;
+    }
+
+    public FrameElement empty() {
+        this.empty = true;
+        return this;
     }
 
     /*public char getChar(int index) {

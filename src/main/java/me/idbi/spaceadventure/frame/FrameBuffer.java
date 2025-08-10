@@ -28,8 +28,25 @@ public class FrameBuffer {
         this.priority = 0;
         this.width = width;
         this.height = height;
-        this.rows = new ArrayList<>();
+        this.rows = new CopyOnWriteArrayList<>();
         clear();
+    }
+
+    public FrameBuffer(int height, int width, int priority) {
+        this.priority = priority;
+        this.width = width;
+        this.height = height;
+        this.rows = new CopyOnWriteArrayList<>();
+        clear();
+    }
+
+    public void moveCursor(int row, int column){
+        setCursorColumn(column);
+        setCursorRow(row);
+    }
+
+    public void home(){
+        moveCursor(0,0);
     }
 
     public char get(int row, int column) {
