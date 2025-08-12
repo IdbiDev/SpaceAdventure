@@ -41,7 +41,9 @@ public class FrameManager {
 
     @SneakyThrows
     public void flip() {
-        StringBuilder builder = new StringBuilder();
+        FrameBuffer display = new FrameBuffer(height, width);
+
+        int rowCounter, elCounter;
         for (FrameBuffer buffer : this.buffers) {
             int i = 1;
             Main.getTerminalManager().moveCursorRaw(1, 0);

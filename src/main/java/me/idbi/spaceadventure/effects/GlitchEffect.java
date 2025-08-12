@@ -22,11 +22,11 @@ public class GlitchEffect implements IEffect {
     @Override
     public void playEffect() {
         buffer.clear();
-        for (int count = 0; count < 4; count++) {
+        for (int count = 0; count < 9; count++) {
             Random random = new Random();
-            int rowRandom = random.nextInt(1, buffer.getHeight());
-            int colRandom = random.nextInt(1, buffer.getWidth());
-            for (int i = 0; i < 7; i++) {
+            int rowRandom = random.nextInt(0, buffer.getHeight());
+            int colRandom = random.nextInt(0, buffer.getWidth());
+            for (int i = 0; i < 9; i++) {
                 buffer.moveCursor(rowRandom, colRandom + i);
                 buffer.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
                 //System.out.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);

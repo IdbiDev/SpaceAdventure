@@ -45,7 +45,7 @@ public class Main {
 //        mapManager.generateCircularMap();
 //        MapManager mapManager = new MapManager();
 //        mapManager.generateMaps();
-        //sceneManager.setScene(Scenes.GAME_START_INTRO.getScene());
+        sceneManager.setScene(Scenes.GAME_START_INTRO.getScene());
         sceneManager.setScene(Scenes.MAIN_MENU.getScene());
         sceneManager.getThread().start();
         while (true) {
