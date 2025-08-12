@@ -50,7 +50,7 @@ public class Main {
         sceneManager.getThread().start();
         while (true) {
             try {
-                Thread.sleep(new Random().nextLong(250, 3000));
+                Thread.sleep(new Random().nextLong(250, 1000));
                 GlitchEffect eff = new GlitchEffect();
                 for (int i = 0; i < 4; i++) {
                     effectManager.queue(eff);

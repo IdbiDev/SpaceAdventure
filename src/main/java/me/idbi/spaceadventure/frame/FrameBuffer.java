@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -138,31 +139,13 @@ public class FrameBuffer {
 
     public List<FrameElement> createElements(String code, String s) {
         List<FrameElement> el = new ArrayList<>();
-        el.add(new FrameElement(code, s.charAt(0)));
-        for (int i = 1; i < s.length(); i++) {
-            el.add(new FrameElement("", s.charAt(i)));
+        for (int i = 0; i < s.length(); i++) {
+            el.add(new FrameElement(code, s.charAt(i)));
         }
         return el;
     }
 
     public void clear() {
-        lock.writeLock().lock();
-        try {
-            this.cursorColumn = 0;
-            this.cursorRow = 0;
-            this.rows.clear();
-            for (int y = 0; y < height; y++) {
-                FrameRow frameRow = new FrameRow();
-                for (int x = 0; x < width; x++) {
-                    frameRow.getElements().add(new FrameElement(' '));
-                }
-                this.rows.add(frameRow);
-            }
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-    public void empty() {
         lock.writeLock().lock();
         try {
             this.cursorColumn = 0;

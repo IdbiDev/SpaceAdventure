@@ -45,17 +45,33 @@ public class FrameManager {
 
         int rowCounter, elCounter;
         for (FrameBuffer buffer : this.buffers) {
-            int i = 1;
-            Main.getTerminalManager().moveCursorRaw(1, 0);
+            rowCounter = 0;
             for (FrameRow row : buffer.getRows()) {
+                elCounter = 0;
                 for (FrameElement element : row.snapshotElements()) {
-                     if(element.isEmpty()) continue;
-                    builder.append(element);
+                    FrameRow displayRow = display.getRows().get(rowCounter);
+                    FrameElement displayEl = displayRow.getElements().get(elCounter);
+
+                    if(displayEl.isEmpty() && !element.isEmpty()) {
+                        displayRow.getElements().set(elCounter, element);
+                    }
+                    elCounter++;
                 }
-                System.out.print(builder);
-                builder.setLength(0);
-                Main.getTerminalManager().moveCursorRaw(++i, 0);
+                rowCounter++;
             }
+        }
+
+        StringBuilder builder = new StringBuilder();
+        int i = 1;
+        Main.getTerminalManager().moveCursorRaw(i, 0);
+        for (FrameRow row : display.getRows()) {
+            for (FrameElement el : row.snapshotElements()) {
+                builder.append(el);
+            }
+
+            System.out.print(TerminalManager.Style.RESET.getCode() + builder);
+            builder.setLength(0);
+            Main.getTerminalManager().moveCursorRaw(++i, 0);
         }
         //System.out.println("Elapsed time: " + (System.currentTimeMillis() - asd) + "==============================================");
     }

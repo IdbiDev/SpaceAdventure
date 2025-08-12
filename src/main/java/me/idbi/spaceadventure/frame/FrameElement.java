@@ -1,24 +1,35 @@
 package me.idbi.spaceadventure.frame;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import me.idbi.spaceadventure.terminal.TerminalManager;
 
 @Getter
+@AllArgsConstructor
 public class FrameElement {
 
-    private String code;
+    private String before;
     private char string;
+    private String after;
 
     private boolean empty;
 
-    public FrameElement(String code, char string) {
-        this.code = code;
-        this.string = string;
-        this.empty = false;
+    public FrameElement(String before, char string) {
+        this(before, string, "", false);
+    }
+
+    public FrameElement(String before, char string, String after) {
+        this(before, string, after, false);
+    }
+
+    public FrameElement(char string, String after) {
+        this("", string, after, false);
     }
 
     public FrameElement(char string) {
-        this.code = "";
+        this.before = "";
         this.string = string;
+        this.after = "";
         this.empty = false;
     }
 
@@ -52,6 +63,12 @@ public class FrameElement {
 
     @Override
     public String toString() {
-        return code + string;
+        /*if(empty) {
+            return "|";
+        }
+        if(string == ' ') {
+            return "%";
+        }*/
+        return before + string + TerminalManager.Style.RESET;
     }
 }

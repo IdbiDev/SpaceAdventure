@@ -86,7 +86,7 @@ public class FrameRow {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (FrameElement element : elements) {
-            sb.append(element.getCode()).append(element.getString());
+            sb.append(element.getBefore()).append(element.getString());
         }
         return sb.toString();
     }

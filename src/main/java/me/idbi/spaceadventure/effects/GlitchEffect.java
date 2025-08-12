@@ -29,11 +29,13 @@ public class GlitchEffect implements IEffect {
             for (int i = 0; i < 9; i++) {
                 buffer.moveCursor(rowRandom, colRandom + i);
                 buffer.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
-                //System.out.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
-                //System.out.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
-               // indexes.add(Map.entry(rowRandom, colRandom + i));
-                //tm.mov
             }
         }
+
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+        }
+        buffer.clear();
     }
 }
