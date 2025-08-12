@@ -19,8 +19,8 @@ public class FrameBuffer {
     @Setter private int cursorRow;
     @Setter private int cursorColumn;
 
-    private int width;
-    private int height;
+    @Setter private int width;
+    @Setter private int height;
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     @Setter private boolean needUpdate;

@@ -102,7 +102,7 @@ public class KeyboardListener implements Runnable {
                         if (this.inputMode) {
                             if (this.inputBuffer.isEmpty()) break;
                             this.inputBuffer = this.inputBuffer.substring(0, this.inputBuffer.length() - 1);
-                            Main.getTerminalManager().clearLine();
+                            //Main.getTerminalManager().clearLine();
                             //Main.getClientData().refreshBuffer();
                             //System.out.print(" ");
                             //Main.getClientData().getTerminalManager().moveCursorLeft(1);
@@ -122,7 +122,11 @@ public class KeyboardListener implements Runnable {
                         if (this.inputMode) {
                             this.inputMode = false;
                         } else {
-
+                            if (Main.getSceneManager().getTable() != null) {
+                                if(Main.getSceneManager().getTable().getSelector().getSelectedCell() != null) {
+                                    Main.getSceneManager().getTable().getSelector().getSelectedCell().run();
+                                }
+                            }
                         }
                         break;
                     }

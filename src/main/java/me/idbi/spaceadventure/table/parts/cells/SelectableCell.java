@@ -4,10 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.idbi.spaceadventure.table.Alignment;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 @Getter
 public class SelectableCell extends Cell {
 
     private boolean selected;
+    private Runnable action;
 
     public SelectableCell(String text) {
         super(text);
@@ -35,6 +39,17 @@ public class SelectableCell extends Cell {
     public SelectableCell unselect() {
         this.selected = false;
         return this;
+    }
+
+    public SelectableCell setAction(Runnable action) {
+        this.action = action;
+        return this;
+    }
+
+    public void run() {
+        if (this.action != null) {
+            action.run();
+        }
     }
 
     @Override

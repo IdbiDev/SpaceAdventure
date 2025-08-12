@@ -17,7 +17,7 @@ public class InputManager {
             String previousPrefix = keyboard.getInputPrefix();
             keyboard.setInputPrefix(text);
 
-            Main.getTerminalManager().clearLine();
+            //Main.getTerminalManager().clearLine();
             while (keyboard.isInputMode()) {
                 if (keyboard.isPrepareExit()) break;
                 System.out.print("\r" + keyboard.getInputPrefix() + keyboard.getInputBuffer());
