@@ -20,10 +20,16 @@ public class GameMap {
     @Setter
     private boolean mapPlaced = false;
 
+
+    private final int width;
+    private final int height;
+
     public GameMap(String name, MapType mapType) {
         this.name = name;
         this.mapType = mapType;
         mapObjects = new ConcurrentHashMap<>();
+        this.width = 150;
+        this.height = 40;
     }
 
     public List<Door> getDoors() {

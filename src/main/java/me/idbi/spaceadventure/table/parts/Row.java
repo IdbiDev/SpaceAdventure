@@ -5,6 +5,7 @@ import lombok.Getter;
 import me.idbi.spaceadventure.table.parts.cells.Cell;
 import me.idbi.spaceadventure.table.TableRenderer;
 import me.idbi.spaceadventure.terminal.TerminalManager;
+import me.idbi.spaceadventure.terminal.formatters.TerminalColor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,11 +17,11 @@ public class Row {
 
     private List<Cell> cells;
 
-    private TerminalManager.Color background;
-    private TerminalManager.Color foreground;
+    private TerminalColor background;
+    private TerminalColor foreground;
 
     public Row() {
-        this(TerminalManager.Color.BLACK_BACKGROUND, TerminalManager.Color.WHITE);
+        this(TerminalColor.BLACK_BACKGROUND, TerminalColor.WHITE);
     }
 
     public Row(Cell... cells) {
@@ -28,7 +29,7 @@ public class Row {
         addCells(cells);
     }
 
-    public Row(TerminalManager.Color background, TerminalManager.Color foreground) {
+    public Row(TerminalColor background, TerminalColor foreground) {
         this.cells = new ArrayList<>();
         this.background = background;
         this.foreground = foreground;

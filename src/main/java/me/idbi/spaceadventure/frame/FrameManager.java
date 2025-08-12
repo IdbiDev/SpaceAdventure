@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import me.idbi.spaceadventure.Main;
 import me.idbi.spaceadventure.terminal.TerminalManager;
+import me.idbi.spaceadventure.terminal.formatters.TerminalStyle;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -69,10 +70,24 @@ public class FrameManager {
                 builder.append(el);
             }
 
-            System.out.print(TerminalManager.Style.RESET.getCode() + builder);
+            System.out.print(TerminalStyle.RESET.getCode() + builder);
             builder.setLength(0);
             Main.getTerminalManager().moveCursorRaw(++i, 0);
         }
         //System.out.println("Elapsed time: " + (System.currentTimeMillis() - asd) + "==============================================");
+    }
+
+    public void redraw() {
+        this.height = Main.getTerminalManager().getHeight();
+        this.width = Main.getTerminalManager().getWidth();
+
+        for (FrameBuffer buffer : buffers) {
+            buffer.setHeight(height);
+            buffer.setWidth(width);
+            buffer.clear();
+        }
+
+        Main.getTerminalManager().clear();
+        flip();
     }
 }

@@ -22,12 +22,17 @@ public class SceneManager {
         sceneFrameBuffer = Main.getFrameManager().createBuffer(5);
     }
 
-    public void setScene(Scene scene) {
+    private void setScene(Scene scene) {
         sceneFrameBuffer.clear();
+        Main.getFrameManager().redraw();
         scene.setup(sceneFrameBuffer);
         this.currentScene = scene;
 
         draw(true);
+    }
+
+    public void setScene(Scenes scene) {
+        this.setScene(scene.getScene());
     }
 
     public void draw(boolean clear) {

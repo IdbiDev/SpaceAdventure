@@ -1,9 +1,11 @@
 package me.idbi.spaceadventure.map;
 
+import lombok.Getter;
 import me.idbi.spaceadventure.map.objects.Border;
 import me.idbi.spaceadventure.map.objects.Door;
 import me.idbi.spaceadventure.map.objects.EmptyTile;
 import me.idbi.spaceadventure.terminal.TerminalManager;
+import me.idbi.spaceadventure.terminal.formatters.TerminalColor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 public class MapManager {
 
+    @Getter
     private final List<GameMap> loadedMaps;
     private List<GameMap> hallways;
 
@@ -121,7 +124,7 @@ public class MapManager {
                                 mapData.getInt("y"));
                         map.getMapObjects().put(
                                 temp,
-                                new EmptyTile(temp, TerminalManager.Color.valueOf(mapData.getString("foreground_color")),TerminalManager.Color.valueOf(mapData.getString("background_color")))
+                                new EmptyTile(temp, TerminalColor.valueOf(mapData.getString("foreground_color")), TerminalColor.valueOf(mapData.getString("background_color")))
                         );
                         break;
                     }
@@ -132,7 +135,7 @@ public class MapManager {
                                 mapData.getInt("y"));
                         map.getMapObjects().put(
                                 temp,
-                                new Border(temp, TerminalManager.Color.valueOf(mapData.getString("foreground_color")),TerminalManager.Color.valueOf(mapData.getString("background_color")))
+                                new Border(temp, TerminalColor.valueOf(mapData.getString("foreground_color")), TerminalColor.valueOf(mapData.getString("background_color")),mapData.getBoolean("is_start_wall"))
                         );
                         break;
                     }
@@ -143,7 +146,7 @@ public class MapManager {
                                 mapData.getInt("y"));
                         map.getMapObjects().put(
                                 temp,
-                                new Door(temp, TerminalManager.Color.valueOf(mapData.getString("foreground_color")),TerminalManager.Color.valueOf(mapData.getString("background_color")))
+                                new Door(temp, TerminalColor.valueOf(mapData.getString("foreground_color")), TerminalColor.valueOf(mapData.getString("background_color")))
                         );
                         break;
                     }

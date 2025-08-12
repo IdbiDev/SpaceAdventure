@@ -3,6 +3,7 @@ package me.idbi.spaceadventure.frame;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.idbi.spaceadventure.terminal.TerminalManager;
+import me.idbi.spaceadventure.terminal.formatters.TerminalStyle;
 
 @Getter
 @AllArgsConstructor
@@ -69,6 +70,6 @@ public class FrameElement {
         if(string == ' ') {
             return "%";
         }*/
-        return before + string + TerminalManager.Style.RESET;
+        return before + string + TerminalStyle.RESET;
     }
 }

@@ -3,8 +3,7 @@ package me.idbi.spaceadventure.table.parts.cells;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.idbi.spaceadventure.table.Alignment;
-import me.idbi.spaceadventure.table.TableRenderer;
-import me.idbi.spaceadventure.terminal.TerminalManager;
+import me.idbi.spaceadventure.terminal.formatters.TerminalColor;
 
 @Getter
 @AllArgsConstructor
@@ -14,8 +13,8 @@ public class Cell {
     private Alignment alignment;
     private int colspan;
 
-    private TerminalManager.Color background;
-    private TerminalManager.Color foreground;
+    private TerminalColor background;
+    private TerminalColor foreground;
 
     public Cell(String text) {
         this(text, Alignment.LEFT, 1);
@@ -33,12 +32,12 @@ public class Cell {
         this(text, alignment, colspan, null, null);
     }
 
-    public Cell background(TerminalManager.Color background) {
+    public Cell background(TerminalColor background) {
         this.background = background;
         return this;
     }
 
-    public Cell foreground(TerminalManager.Color foreground) {
+    public Cell foreground(TerminalColor foreground) {
         this.foreground = foreground;
         return this;
     }

@@ -1,12 +1,10 @@
 package me.idbi.spaceadventure.table;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.idbi.spaceadventure.Main;
 import me.idbi.spaceadventure.table.parts.Row;
 import me.idbi.spaceadventure.table.parts.cells.Cell;
 import me.idbi.spaceadventure.table.parts.cells.EmptyCell;
-import me.idbi.spaceadventure.terminal.TerminalManager;
+import me.idbi.spaceadventure.terminal.formatters.TerminalStyle;
 
 import java.util.*;
 
@@ -47,10 +45,10 @@ public class TableRenderer {
                 if (cell == null) continue;
 
                 colorize(cell, rowBuilder).append(Utils.fillCell(cell, table.getFalakKozottWidth(cell) - 2));
-                rowBuilder.append(TerminalManager.Style.RESET);
+                rowBuilder.append(TerminalStyle.RESET);
 
                 colorize(row, rowBuilder).append(cell == row.getCells().getLast() ? " |" : " | ");
-                rowBuilder.append(TerminalManager.Style.RESET);
+                rowBuilder.append(TerminalStyle.RESET);
             }
 
             output.add(rowBuilder.toString());

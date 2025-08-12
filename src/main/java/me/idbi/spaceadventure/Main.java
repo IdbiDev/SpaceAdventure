@@ -6,6 +6,7 @@ import me.idbi.spaceadventure.effects.EffectManager;
 import me.idbi.spaceadventure.effects.GlitchEffect;
 import me.idbi.spaceadventure.frame.FrameBuffer;
 import me.idbi.spaceadventure.frame.FrameManager;
+import me.idbi.spaceadventure.map.Location;
 import me.idbi.spaceadventure.map.MapManager;
 import me.idbi.spaceadventure.player.Player;
 import me.idbi.spaceadventure.scene.SceneManager;
@@ -24,6 +25,7 @@ public class Main {
     @Getter private static FrameManager frameManager;
     @Getter private static SceneManager sceneManager;
     @Getter private static Player player;
+    @Getter private static MapManager mapManager;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         //Debug.initDebug();
@@ -33,31 +35,34 @@ public class Main {
         sceneManager = new SceneManager();
         inputManager = new InputManager();
         effectManager = new EffectManager();
-        player = new Player("null",null);
+        mapManager = new MapManager();
+
+        player = new Player("null",new Location(mapManager.getLoadedMaps().getFirst(),0,0));
+
         terminalManager.clear();
+
         Runnable exit = () -> {
             Debug.closeDebug();
             System.out.println("DONE");
         };
-        //terminalManager.println( TerminalManager.Color.BRIGHT_CYAN_BACKGROUND.getCode() + TerminalManager.Color.RED.getCode() + "KYSSSSSSS");
 
-//        CircularMapManager mapManager = new CircularMapManager();
-//        mapManager.generateCircularMap();
-//        MapManager mapManager = new MapManager();
-//        mapManager.generateMaps();
-        sceneManager.setScene(Scenes.GAME_START_INTRO.getScene());
-        sceneManager.setScene(Scenes.MAIN_MENU.getScene());
+        //sceneManager.setScene(Scenes.GAME_START_INTRO);
+
+        GlitchEffect eff = new GlitchEffect();
+        eff.start(10);
+
+        sceneManager.setScene(Scenes.MAIN_MENU);
         sceneManager.getThread().start();
-        while (true) {
-            try {
-                Thread.sleep(new Random().nextLong(250, 1000));
-                GlitchEffect eff = new GlitchEffect();
-                for (int i = 0; i < 4; i++) {
-                    effectManager.queue(eff);
-                }
-            } catch (InterruptedException e) {
-            }
-        }
+//        while (true) {
+//            try {
+//                Thread.sleep(new Random().nextLong(250, 1000));
+//                eff = new GlitchEffect();
+//                for (int i = 0; i < 4; i++) {
+//                    effectManager.queue(eff);
+//                }
+//            } catch (InterruptedException e) {
+//            }
+//        }
 //            //Main.getSceneManager().draw(false);
 //
 //        }

@@ -3,6 +3,8 @@ package me.idbi.spaceadventure.table;
 import me.idbi.spaceadventure.table.parts.cells.Cell;
 import me.idbi.spaceadventure.table.parts.cells.EmptyCell;
 import me.idbi.spaceadventure.terminal.TerminalManager;
+import me.idbi.spaceadventure.terminal.formatters.TerminalColor;
+import me.idbi.spaceadventure.terminal.formatters.TerminalStyle;
 
 public class Utils {
     /**
@@ -46,10 +48,10 @@ public class Utils {
     }
 
     public static String purifyRow(String row) {
-        for (TerminalManager.Color value : TerminalManager.Color.values()) {
+        for (TerminalColor value : TerminalColor.values()) {
             row = row.replace(value.getCode(), "");
         }
-        for (TerminalManager.Style value : TerminalManager.Style.values()) {
+        for (TerminalStyle value : TerminalStyle.values()) {
             row = row.replace(value.getCode(), "");
         }
         return row;

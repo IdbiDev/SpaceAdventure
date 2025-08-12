@@ -4,23 +4,21 @@ import lombok.Getter;
 import me.idbi.spaceadventure.Main;
 import me.idbi.spaceadventure.frame.FrameBuffer;
 import me.idbi.spaceadventure.terminal.TerminalManager;
+import me.idbi.spaceadventure.terminal.formatters.TerminalColor;
+import me.idbi.spaceadventure.terminal.formatters.TerminalStyle;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
-public class GlitchEffect implements IEffect {
-
-    private final FrameBuffer buffer;
+public class GlitchEffect extends AbstractEffect {
 
     public GlitchEffect() {
-        this.buffer = Main.getFrameManager().createBuffer(2);
+        super(Main.getFrameManager().createBuffer(2));
     }
 
     @Override
-    public void playEffect() {
+    public void play() {
         buffer.clear();
         for (int count = 0; count < 9; count++) {
             Random random = new Random();
@@ -28,14 +26,10 @@ public class GlitchEffect implements IEffect {
             int colRandom = random.nextInt(0, buffer.getWidth());
             for (int i = 0; i < 9; i++) {
                 buffer.moveCursor(rowRandom, colRandom + i);
-                buffer.print(TerminalManager.Color.BRIGHT_BLACK + "█" + TerminalManager.Style.RESET);
+                buffer.print(TerminalColor.BRIGHT_BLACK + "█" + TerminalStyle.RESET);
             }
         }
-
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-        }
-        buffer.clear();
+        next = System.currentTimeMillis() + ThreadLocalRandom.current().nextLong(100, 1000);
+        reset = System.currentTimeMillis() + 75;
     }
 }
