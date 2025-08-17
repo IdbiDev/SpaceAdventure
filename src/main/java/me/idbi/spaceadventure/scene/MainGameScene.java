@@ -62,8 +62,6 @@ public class MainGameScene implements Scene {
         frameBuffer.print("@");
     }
 
-
-
     private void dxDrawRectangle(FrameBuffer buffer, int x, int y, int width, int height) {
         buffer.moveCursor(y,x);
         buffer.print("█".repeat(width));

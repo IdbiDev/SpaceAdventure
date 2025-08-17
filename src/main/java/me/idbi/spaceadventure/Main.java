@@ -37,7 +37,7 @@ public class Main {
         effectManager = new EffectManager();
         mapManager = new MapManager();
 
-        player = new Player("null",new Location(mapManager.getLoadedMaps().getFirst(),0,0));
+        player = new Player("null", new Location(mapManager.getLoadedMaps().getFirst(), 0, 0));
 
         terminalManager.clear();
 
@@ -48,11 +48,11 @@ public class Main {
 
         //sceneManager.setScene(Scenes.GAME_START_INTRO);
 
-        GlitchEffect eff = new GlitchEffect();
-        eff.start(10);
-
         sceneManager.setScene(Scenes.MAIN_MENU);
         sceneManager.getThread().start();
+
+        GlitchEffect eff = new GlitchEffect();
+        eff.start(10);
 //        while (true) {
 //            try {
 //                Thread.sleep(new Random().nextLong(250, 1000));

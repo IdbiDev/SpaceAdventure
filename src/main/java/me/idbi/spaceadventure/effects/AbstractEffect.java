@@ -3,6 +3,7 @@ package me.idbi.spaceadventure.effects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.idbi.spaceadventure.Main;
+import me.idbi.spaceadventure.debug.Debug;
 import me.idbi.spaceadventure.frame.FrameBuffer;
 
 @Getter
@@ -27,13 +28,14 @@ public abstract class AbstractEffect {
     }
 
     public void update() {
-        if(next < System.currentTimeMillis()) {
+        long unixTime = System.currentTimeMillis();
+        if(next < unixTime) {
             play();
         }
-        if(reset < System.currentTimeMillis()) {
+        if(reset < unixTime) {
             reset();
         }
-        if(stop < System.currentTimeMillis()) {
+        if(stop < unixTime) {
             stop();
             reset();
         }

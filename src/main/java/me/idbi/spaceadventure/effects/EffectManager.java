@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EffectManager {
     @Getter
@@ -39,6 +40,11 @@ public class EffectManager {
 
     public void queue(AbstractEffect effect) {
         effects.add(effect);
+    }
+
+    public void reset() {
+        this.activeEffects.clear();
+        this.effects.clear();
     }
 
     public AbstractEffect puoll() {

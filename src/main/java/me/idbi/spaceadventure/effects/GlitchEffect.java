@@ -2,8 +2,7 @@ package me.idbi.spaceadventure.effects;
 
 import lombok.Getter;
 import me.idbi.spaceadventure.Main;
-import me.idbi.spaceadventure.frame.FrameBuffer;
-import me.idbi.spaceadventure.terminal.TerminalManager;
+import me.idbi.spaceadventure.debug.Debug;
 import me.idbi.spaceadventure.terminal.formatters.TerminalColor;
 import me.idbi.spaceadventure.terminal.formatters.TerminalStyle;
 

@@ -43,6 +43,10 @@ public class MainMenuScene implements Scene {
 
         Main.getTerminalManager().hideCursor();
 
+        if(Main.getSceneManager().getTable() == null) {
+            setup(frameBuffer);
+        }
+
         TableRenderer renderer = Main.getSceneManager().getTable().getRenderer();
         int tempY = 0;
         for (String s : renderer.render()) {
