@@ -16,7 +16,7 @@ public class EffectManager {
     private final Thread runnableThread;
 
     public EffectManager() {
-        activeEffects = new ArrayList<>();
+        activeEffects = new CopyOnWriteArrayList<>();
         effects = new LinkedList<>();
 
         Runnable runnable = () -> {

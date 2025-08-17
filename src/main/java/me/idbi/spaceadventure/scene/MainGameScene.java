@@ -3,6 +3,11 @@ package me.idbi.spaceadventure.scene;
 import me.idbi.spaceadventure.Main;
 import me.idbi.spaceadventure.frame.FrameBuffer;
 import me.idbi.spaceadventure.map.GameMap;
+import me.idbi.spaceadventure.map.Location;
+import me.idbi.spaceadventure.map.MapMondeo;
+import me.idbi.spaceadventure.map.objects.Border;
+import me.idbi.spaceadventure.map.objects.Door;
+import me.idbi.spaceadventure.map.objects.EmptyTile;
 import me.idbi.spaceadventure.player.Player;
 
 
@@ -23,13 +28,38 @@ public class MainGameScene implements Scene {
 
         int cX = frameBuffer.getWidth() / 2;
         int cY = frameBuffer.getHeight() / 2;
-        dxDrawRectangle(frameBuffer, cX - mapWidth / 2, cY - mapHeight / 2, mapWidth, mapHeight);
-        frameBuffer.moveCursor(cY - mapHeight / 2 - 1,cX - mapWidth / 2);
+
+        int topLeftCornerX = cX - mapWidth / 2;
+        int topLeftCornerY = cY - mapHeight / 2;
+
+        dxDrawRectangle(frameBuffer, topLeftCornerX - 1, topLeftCornerY - 1, mapWidth + 1, mapHeight + 1);
+
+        frameBuffer.moveCursor(cY - mapHeight / 2 - 2,cX - mapWidth / 2);
         frameBuffer.print(map.getName());
 
-        frameBuffer.moveCursor(cY + mapHeight / 2 + 3,cX);
+        int strLen = "Task: Kill yourself before you play lol".length();
+        frameBuffer.moveCursor(cY + mapHeight / 2 + 3,cX - strLen / 2);
         frameBuffer.print("Task: Kill yourself before you play lol");
+
         //Get map
+        for (MapMondeo mapObj : player.getLocation().getMap().getMapObjects().values()) {
+            Location l = mapObj.getLocation();
+            frameBuffer.moveCursor(topLeftCornerY + l.getY(), topLeftCornerX + l.getX());
+            if(mapObj instanceof Border b) {
+                if(b.isFirstWall())
+                    frameBuffer.print("[");
+                else
+                    frameBuffer.print("]");
+            }
+            if(mapObj instanceof Door){
+                frameBuffer.print("=");
+            }
+            if(mapObj instanceof EmptyTile) {
+                frameBuffer.print(".");
+            }
+        }
+        frameBuffer.moveCursor(topLeftCornerY + player.getLocation().getY(), topLeftCornerX + player.getLocation().getX());
+        frameBuffer.print("@");
     }
 
 

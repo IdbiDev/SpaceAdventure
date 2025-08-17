@@ -5,7 +5,6 @@ import lombok.Setter;
 import me.idbi.spaceadventure.map.objects.Door;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,24 +20,28 @@ public class GameMap {
     private boolean mapPlaced = false;
 
 
-    private final int width;
-    private final int height;
+    @Setter private int width;
+    @Setter private int height;
 
     public GameMap(String name, MapType mapType) {
         this.name = name;
         this.mapType = mapType;
         mapObjects = new ConcurrentHashMap<>();
-        this.width = 150;
-        this.height = 40;
+        width = 0;
+        height = 0;
     }
 
-    public List<Door> getDoors() {
-        List<Door> doors = new ArrayList<>();
-        mapObjects.forEach((location, mapMondeo) -> {
-            if(mapMondeo instanceof Door) {
-                doors.add((Door) mapMondeo);
+    public List<DoorImpl> getDoors() {
+        List<DoorImpl> doors = new ArrayList<>();
+        int currentId = -1;
+        for (Map.Entry<Location, MapMondeo> entry : mapObjects.entrySet()) {
+            if(entry.getValue() instanceof Door d) {
+                if(currentId != d.getContinueId()) {
+                    doors.add(d.getActualDoor());
+                    currentId = d.getContinueId();
+                }
             }
-        });
+        }
         return doors;
     }
 }

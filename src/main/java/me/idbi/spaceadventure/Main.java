@@ -28,7 +28,7 @@ public class Main {
     @Getter private static MapManager mapManager;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        //Debug.initDebug();
+        Debug.initDebug();
         Debug.printDebug("CICA");
         terminalManager = new TerminalManager();
         frameManager = new FrameManager(terminalManager.getHeight(), terminalManager.getWidth());

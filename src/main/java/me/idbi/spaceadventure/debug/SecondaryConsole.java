@@ -48,6 +48,14 @@ public class SecondaryConsole {
         } catch (Exception e) {
             System.err.println("Error in debug console: " + e.getMessage());
             e.printStackTrace();
+
+            try {
+                new ProcessBuilder("cmd", "/c", "exit").start();
+            } catch (Exception asd) {
+                asd.printStackTrace();
+            }
+            //System.exit(0);
+
         } finally {
             // Clean up resources
             try {
@@ -56,6 +64,12 @@ public class SecondaryConsole {
 
                 System.out.println("Debug console terminated.");
             } catch (Exception e) {
+                try {
+                    new ProcessBuilder("cmd", "/c", "exit").start();
+                } catch (Exception asd) {
+                    asd.printStackTrace();
+                }
+
                 // Ignore close errors
             }
         }

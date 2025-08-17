@@ -100,7 +100,7 @@ public class TerminalManager {
                 if (lastWidth != terminal.getWidth() || lastHeight != terminal.getHeight()) {
                     //Main.debug("Terminal size changed");
                     lastWidth = terminal.getWidth();
-                    lastHeight = terminal.getHeight();  Main.getFrameManager().redraw();
+                    lastHeight = terminal.getHeight();  Main.getFrameManager().reset();
 
                 }
                 if (lastWidth < 150 || lastHeight < 40) {

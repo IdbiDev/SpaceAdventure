@@ -2,6 +2,7 @@ package me.idbi.spaceadventure.frame;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.idbi.spaceadventure.map.Location;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +42,7 @@ public class FrameBuffer {
         clear();
     }
 
-    public void moveCursor(int row, int column){
+    public void moveCursor(int row, int column) {
         setCursorColumn(column);
         setCursorRow(row);
     }

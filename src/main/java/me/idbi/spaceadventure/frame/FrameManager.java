@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import me.idbi.spaceadventure.Main;
-import me.idbi.spaceadventure.terminal.TerminalManager;
 import me.idbi.spaceadventure.terminal.formatters.TerminalStyle;
 
 import java.util.*;
@@ -77,7 +76,7 @@ public class FrameManager {
         //System.out.println("Elapsed time: " + (System.currentTimeMillis() - asd) + "==============================================");
     }
 
-    public void redraw() {
+    public void reset() {
         this.height = Main.getTerminalManager().getHeight();
         this.width = Main.getTerminalManager().getWidth();
 
@@ -88,6 +87,6 @@ public class FrameManager {
         }
 
         Main.getTerminalManager().clear();
-        flip();
+        //flip();
     }
 }

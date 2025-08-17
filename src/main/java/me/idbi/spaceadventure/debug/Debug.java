@@ -39,6 +39,22 @@ public class Debug {
 
             // Send an initial test message
             writer.println("Debug console initialized successfully");
+            // Somewhere in your initialization code:
+            System.setErr(new PrintStream(new java.io.OutputStream() {
+                @Override
+                public void write(int b) {
+                    // Collect single characters into a buffer if you want whole lines,
+                    // but for simplicity just forward directly
+                    printDebug(String.valueOf((char) b));
+                }
+
+                @Override
+                public void write(byte[] b, int off, int len) {
+                    // Convert bytes to a string and pass to printDebug
+                    printDebug(new String(b, off, len));
+                }
+            }));
+
         } catch (IOException e) {
             System.err.println("Failed to initialize debug console:");
             e.printStackTrace();

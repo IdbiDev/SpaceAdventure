@@ -3,6 +3,7 @@ package me.idbi.spaceadventure.scene;
 import lombok.Getter;
 import lombok.Setter;
 import me.idbi.spaceadventure.Main;
+import me.idbi.spaceadventure.debug.Debug;
 import me.idbi.spaceadventure.frame.FrameBuffer;
 import me.idbi.spaceadventure.table.Table;
 
@@ -15,7 +16,7 @@ public class SceneManager {
     @Setter private boolean drawing;
     private Thread thread;
     private FrameBuffer sceneFrameBuffer;
-
+    private boolean wasSetupCalled;
 
     public SceneManager() {
         thread = new Thread(new SceneUpdater());
@@ -23,23 +24,29 @@ public class SceneManager {
     }
 
     private void setScene(Scene scene) {
-        sceneFrameBuffer.clear();
-        Main.getFrameManager().redraw();
-        scene.setup(sceneFrameBuffer);
+        wasSetupCalled = false;
         this.currentScene = scene;
+        sceneFrameBuffer.clear();
+        table = null;
 
-        draw(true);
+        Main.getFrameManager().reset();
+//        Main.getTerminalManager().clear();
+        Main.getEffectManager().reset();
+
+        scene.setup(sceneFrameBuffer);
+        wasSetupCalled = true;
+        //draw(true);
     }
 
     public void setScene(Scenes scene) {
+        Debug.printDebug("setScene" + scene.name());
         this.setScene(scene.getScene());
     }
 
     public void draw(boolean clear) {
         if(clear)
             Main.getTerminalManager().clear();
-        currentScene.draw(sceneFrameBuffer);
-
-
+        if(wasSetupCalled)
+            currentScene.draw(sceneFrameBuffer);
     }
 }

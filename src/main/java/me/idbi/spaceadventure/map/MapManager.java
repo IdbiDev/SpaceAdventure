@@ -4,16 +4,12 @@ import lombok.Getter;
 import me.idbi.spaceadventure.map.objects.Border;
 import me.idbi.spaceadventure.map.objects.Door;
 import me.idbi.spaceadventure.map.objects.EmptyTile;
-import me.idbi.spaceadventure.terminal.TerminalManager;
 import me.idbi.spaceadventure.terminal.formatters.TerminalColor;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.*;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.logging.Filter;
 import java.util.stream.Collectors;
 
 public class MapManager {
@@ -59,7 +55,7 @@ public class MapManager {
         List<MapType> availableTypes = new ArrayList<>(Arrays.stream(MapType.values()).toList());
         availableTypes.remove(MapType.LOBBY); // we dont need lobby
         availableTypes.remove(MapType.HALLWAY); // we dont need hallways
-        for (Door door : lobby.getDoors()) {
+        for (DoorImpl door : lobby.getDoors()) {
 
             // Cycle through each lobby door
             MapType type = availableTypes.get(rand.nextInt(availableTypes.size())); // getType
@@ -113,6 +109,8 @@ public class MapManager {
             String lines = new BufferedReader(new InputStreamReader(in)).lines().collect(Collectors.joining("\n"));
             JSONObject json = new JSONObject(lines);
             GameMap map = new GameMap(json.getString("name"),MapType.valueOf(json.getString("type")));
+            map.setHeight(json.getInt("height"));
+            map.setWidth(json.getInt("width"));
             JSONArray array =  json.getJSONArray("map_data");
             for (int i = 0; i < array.length(); i++) {
                 JSONObject mapData =  array.getJSONObject(i);
@@ -146,7 +144,7 @@ public class MapManager {
                                 mapData.getInt("y"));
                         map.getMapObjects().put(
                                 temp,
-                                new Door(temp, TerminalColor.valueOf(mapData.getString("foreground_color")), TerminalColor.valueOf(mapData.getString("background_color")))
+                                new Door(temp, TerminalColor.valueOf(mapData.getString("foreground_color")), TerminalColor.valueOf(mapData.getString("background_color")),mapData.getInt("continueId"))
                         );
                         break;
                     }
